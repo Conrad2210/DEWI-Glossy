@@ -1,0 +1,57 @@
+\hypertarget{group__glossy__sfd}{
+\section{Management of SFD interrupts}
+\label{group__glossy__sfd}\index{Management of SFD interrupts@{Management of SFD interrupts}}
+}
+\subsection*{Defines}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__glossy__sfd_ga770ed5e9afbb20260ce2791cd3159736}{SFD\_\-CAP\_\-INIT}(edge)
+\begin{DoxyCompactList}\small\item\em Capture instants of SFD events on timer B1. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy__sfd_ga6ba78a35b5699258b8686d954dcbfd68}{
+\#define \hyperlink{group__glossy__sfd_ga6ba78a35b5699258b8686d954dcbfd68}{ENABLE\_\-SFD\_\-INT}()~do \{ TBCCTL1 $|$= CCIE; \} while (0)}
+\label{group__glossy__sfd_ga6ba78a35b5699258b8686d954dcbfd68}
+
+\begin{DoxyCompactList}\small\item\em Enable generation of interrupts due to SFD events. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy__sfd_ga5d2af32ec554abaa0bcaa31d91632af1}{
+\#define \hyperlink{group__glossy__sfd_ga5d2af32ec554abaa0bcaa31d91632af1}{DISABLE\_\-SFD\_\-INT}()~do \{ TBCCTL1 \&= $\sim$CCIE; \} while (0)}
+\label{group__glossy__sfd_ga5d2af32ec554abaa0bcaa31d91632af1}
+
+\begin{DoxyCompactList}\small\item\em Disable generation of interrupts due to SFD events. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy__sfd_ga86745c888328a99fd33f1c9a25b88543}{
+\#define \hyperlink{group__glossy__sfd_ga86745c888328a99fd33f1c9a25b88543}{CLEAR\_\-SFD\_\-INT}()~do \{ TBCCTL1 \&= $\sim$CCIFG; \} while (0)}
+\label{group__glossy__sfd_ga86745c888328a99fd33f1c9a25b88543}
+
+\begin{DoxyCompactList}\small\item\em Clear interrupt flag due to SFD events. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy__sfd_gaf48c215ee6fbfcb0186132170f683ff9}{
+\#define \hyperlink{group__glossy__sfd_gaf48c215ee6fbfcb0186132170f683ff9}{IS\_\-ENABLED\_\-SFD\_\-INT}()~!!(TBCCTL1 \& CCIE)}
+\label{group__glossy__sfd_gaf48c215ee6fbfcb0186132170f683ff9}
+
+\begin{DoxyCompactList}\small\item\em Check if generation of interrupts due to SFD events is enabled. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Define Documentation}
+\hypertarget{group__glossy__sfd_ga770ed5e9afbb20260ce2791cd3159736}{
+\index{Management of SFD interrupts@{Management of SFD interrupts}!SFD\_\-CAP\_\-INIT@{SFD\_\-CAP\_\-INIT}}
+\index{SFD\_\-CAP\_\-INIT@{SFD\_\-CAP\_\-INIT}!Management of SFD interrupts@{Management of SFD interrupts}}
+\subsubsection[{SFD\_\-CAP\_\-INIT}]{\setlength{\rightskip}{0pt plus 5cm}\#define SFD\_\-CAP\_\-INIT(
+\begin{DoxyParamCaption}
+\item[{}]{edge}
+\end{DoxyParamCaption}
+)}}
+\label{group__glossy__sfd_ga770ed5e9afbb20260ce2791cd3159736}
+{\bfseries Value:}
+\begin{DoxyCode}
+do {\
+        P4SEL |= BV(SFD);\
+        TBCCTL1 = edge | CAP | SCS;\
+} while (0)
+\end{DoxyCode}
+
+
+Capture instants of SFD events on timer B1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em edge} & Edge used for capture. \\
+\hline
+\end{DoxyParams}

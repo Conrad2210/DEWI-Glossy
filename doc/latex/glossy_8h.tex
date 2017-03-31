@@ -1,0 +1,282 @@
+\hypertarget{glossy_8h}{
+\section{core/dev/glossy.h File Reference}
+\label{glossy_8h}\index{core/dev/glossy.h@{core/dev/glossy.h}}
+}
+{\ttfamily \#include \char`\"{}contiki.h\char`\"{}}\par
+{\ttfamily \#include \char`\"{}dev/watchdog.h\char`\"{}}\par
+{\ttfamily \#include \char`\"{}dev/cc2420\_\-const.h\char`\"{}}\par
+{\ttfamily \#include \char`\"{}dev/leds.h\char`\"{}}\par
+{\ttfamily \#include \char`\"{}dev/spi.h\char`\"{}}\par
+{\ttfamily \#include $<$stdio.h$>$}\par
+{\ttfamily \#include $<$signal.h$>$}\par
+{\ttfamily \#include $<$stdlib.h$>$}\par
+\subsection*{Defines}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{glossy_8h_ae31848a1e9c6273e473f23549160097d}{GLOSSY\_\-DEBUG}~0
+\item 
+\#define \hyperlink{glossy_8h_a5720943ed00b64a3aa851da6d871548f}{GLOSSY\_\-SYNC\_\-WINDOW}~64
+\item 
+\#define \hyperlink{glossy_8h_a487e29fa0e13ab7964475f9390297b98}{MAX\_\-VALID\_\-RELAY\_\-CNT}~200
+\item 
+\#define \hyperlink{glossy_8h_a6ad8afd99fb11d9b80fb684574b64153}{GLOSSY\_\-INITIATOR\_\-TIMEOUT}~(3 $\ast$ T\_\-slot\_\-h)
+\item 
+\#define \hyperlink{glossy_8h_a0178fa0350084350f45ae1b841579f77}{CLOCK\_\-PHI}~(F\_\-CPU / RTIMER\_\-SECOND)
+\item 
+\hypertarget{glossy_8h_a36433e2b22814f5144842b872b831ae0}{
+\#define {\bfseries GLOSSY\_\-HEADER}~0xfe}
+\label{glossy_8h_a36433e2b22814f5144842b872b831ae0}
+
+\item 
+\hypertarget{glossy_8h_a36a0fc3505da1d2baa47d27f34ada841}{
+\#define {\bfseries GLOSSY\_\-HEADER\_\-LEN}~sizeof(uint8\_\-t)}
+\label{glossy_8h_a36a0fc3505da1d2baa47d27f34ada841}
+
+\item 
+\hypertarget{glossy_8h_af2e3f8f55c8e0010a5c8b79841b6f50b}{
+\#define {\bfseries GLOSSY\_\-RELAY\_\-CNT\_\-LEN}~sizeof(uint8\_\-t)}
+\label{glossy_8h_af2e3f8f55c8e0010a5c8b79841b6f50b}
+
+\item 
+\hypertarget{glossy_8h_aaacd887116785bb3cee04951cda6bdc8}{
+\#define {\bfseries GLOSSY\_\-IS\_\-ON}()~(get\_\-state() != GLOSSY\_\-STATE\_\-OFF)}
+\label{glossy_8h_aaacd887116785bb3cee04951cda6bdc8}
+
+\item 
+\hypertarget{glossy_8h_a4532715c40a74153dc64ecd6ca3a0d5c}{
+\#define {\bfseries FOOTER\_\-LEN}~2}
+\label{glossy_8h_a4532715c40a74153dc64ecd6ca3a0d5c}
+
+\item 
+\hypertarget{glossy_8h_a83fdbb9b1696ab44a5ee79b4753a5343}{
+\#define {\bfseries FOOTER1\_\-CRC\_\-OK}~0x80}
+\label{glossy_8h_a83fdbb9b1696ab44a5ee79b4753a5343}
+
+\item 
+\hypertarget{glossy_8h_af51175f3f8a505d2764461823796d399}{
+\#define {\bfseries FOOTER1\_\-CORRELATION}~0x7f}
+\label{glossy_8h_af51175f3f8a505d2764461823796d399}
+
+\item 
+\hypertarget{glossy_8h_ac581ae5351ed3b56abdbf73a83dd38ae}{
+\#define {\bfseries GLOSSY\_\-LEN\_\-FIELD}~packet\mbox{[}0\mbox{]}}
+\label{glossy_8h_ac581ae5351ed3b56abdbf73a83dd38ae}
+
+\item 
+\hypertarget{glossy_8h_aeb9109ad0557380aec7a2ea210ca80be}{
+\#define {\bfseries GLOSSY\_\-HEADER\_\-FIELD}~packet\mbox{[}1\mbox{]}}
+\label{glossy_8h_aeb9109ad0557380aec7a2ea210ca80be}
+
+\item 
+\hypertarget{glossy_8h_a4f4ece305aaa835945dcad44242d505d}{
+\#define {\bfseries GLOSSY\_\-DATA\_\-FIELD}~packet\mbox{[}2\mbox{]}}
+\label{glossy_8h_a4f4ece305aaa835945dcad44242d505d}
+
+\item 
+\hypertarget{glossy_8h_a983106422a74b89d1c6607a9fdfaf779}{
+\#define {\bfseries GLOSSY\_\-RELAY\_\-CNT\_\-FIELD}~packet\mbox{[}packet\_\-len -\/ FOOTER\_\-LEN\mbox{]}}
+\label{glossy_8h_a983106422a74b89d1c6607a9fdfaf779}
+
+\item 
+\hypertarget{glossy_8h_aa9a2e41ab72498b63fa4ca34eb019555}{
+\#define {\bfseries GLOSSY\_\-RSSI\_\-FIELD}~packet\mbox{[}packet\_\-len -\/ 1\mbox{]}}
+\label{glossy_8h_aa9a2e41ab72498b63fa4ca34eb019555}
+
+\item 
+\hypertarget{glossy_8h_ab0b20231e31d42d379c034a694aab7b2}{
+\#define {\bfseries GLOSSY\_\-CRC\_\-FIELD}~packet\mbox{[}packet\_\-len\mbox{]}}
+\label{glossy_8h_ab0b20231e31d42d379c034a694aab7b2}
+
+\item 
+\#define \hyperlink{group__glossy__capture_ga1ba6973ff6fa6b3ee590efc341ea62eb}{CAPTURE\_\-NEXT\_\-CLOCK\_\-TICK}(t\_\-cap\_\-h, t\_\-cap\_\-l)
+\begin{DoxyCompactList}\small\item\em Capture next low-\/frequency clock tick and DCO clock value at that instant. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__glossy__sfd_ga770ed5e9afbb20260ce2791cd3159736}{SFD\_\-CAP\_\-INIT}(edge)
+\begin{DoxyCompactList}\small\item\em Capture instants of SFD events on timer B1. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy__sfd_ga6ba78a35b5699258b8686d954dcbfd68}{
+\#define \hyperlink{group__glossy__sfd_ga6ba78a35b5699258b8686d954dcbfd68}{ENABLE\_\-SFD\_\-INT}()~do \{ TBCCTL1 $|$= CCIE; \} while (0)}
+\label{group__glossy__sfd_ga6ba78a35b5699258b8686d954dcbfd68}
+
+\begin{DoxyCompactList}\small\item\em Enable generation of interrupts due to SFD events. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy__sfd_ga5d2af32ec554abaa0bcaa31d91632af1}{
+\#define \hyperlink{group__glossy__sfd_ga5d2af32ec554abaa0bcaa31d91632af1}{DISABLE\_\-SFD\_\-INT}()~do \{ TBCCTL1 \&= $\sim$CCIE; \} while (0)}
+\label{group__glossy__sfd_ga5d2af32ec554abaa0bcaa31d91632af1}
+
+\begin{DoxyCompactList}\small\item\em Disable generation of interrupts due to SFD events. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy__sfd_ga86745c888328a99fd33f1c9a25b88543}{
+\#define \hyperlink{group__glossy__sfd_ga86745c888328a99fd33f1c9a25b88543}{CLEAR\_\-SFD\_\-INT}()~do \{ TBCCTL1 \&= $\sim$CCIFG; \} while (0)}
+\label{group__glossy__sfd_ga86745c888328a99fd33f1c9a25b88543}
+
+\begin{DoxyCompactList}\small\item\em Clear interrupt flag due to SFD events. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy__sfd_gaf48c215ee6fbfcb0186132170f683ff9}{
+\#define \hyperlink{group__glossy__sfd_gaf48c215ee6fbfcb0186132170f683ff9}{IS\_\-ENABLED\_\-SFD\_\-INT}()~!!(TBCCTL1 \& CCIE)}
+\label{group__glossy__sfd_gaf48c215ee6fbfcb0186132170f683ff9}
+
+\begin{DoxyCompactList}\small\item\em Check if generation of interrupts due to SFD events is enabled. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ {\bfseries GLOSSY\_\-INITIATOR} =  1, 
+{\bfseries GLOSSY\_\-RECEIVER} =  0
+ \}
+\item 
+enum \{ {\bfseries GLOSSY\_\-SYNC} =  1, 
+{\bfseries GLOSSY\_\-NO\_\-SYNC} =  0
+ \}
+\item 
+enum \hyperlink{glossy_8h_ac2573e60f03b983302456e2f6dc36c8e}{glossy\_\-state} \{ \par
+\hyperlink{glossy_8h_ac2573e60f03b983302456e2f6dc36c8ea333786e842baedddf38273c50c984527}{GLOSSY\_\-STATE\_\-OFF}, 
+\hyperlink{glossy_8h_ac2573e60f03b983302456e2f6dc36c8eae1d1f2321661e98808d63085307e406a}{GLOSSY\_\-STATE\_\-WAITING}, 
+\hyperlink{glossy_8h_ac2573e60f03b983302456e2f6dc36c8ea19b609b975e3516dbb2696f576c8ab4d}{GLOSSY\_\-STATE\_\-RECEIVING}, 
+\hyperlink{glossy_8h_ac2573e60f03b983302456e2f6dc36c8eaddc89cdc977b0b1bb91480dd40560e73}{GLOSSY\_\-STATE\_\-RECEIVED}, 
+\par
+\hyperlink{glossy_8h_ac2573e60f03b983302456e2f6dc36c8eab0cf79ba44610d2e2112ca5e446f7b67}{GLOSSY\_\-STATE\_\-TRANSMITTING}, 
+\hyperlink{glossy_8h_ac2573e60f03b983302456e2f6dc36c8eaa5ac3a78fea5a59b7b60af0286809fbc}{GLOSSY\_\-STATE\_\-TRANSMITTED}, 
+\hyperlink{glossy_8h_ac2573e60f03b983302456e2f6dc36c8ea9c18d95b12e5053ec7d0b20c3686de4a}{GLOSSY\_\-STATE\_\-ABORTED}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{glossy_8h_ab3b97b89eeb2a5153c9a721b98448372}{
+{\bfseries PROCESS\_\-NAME} (glossy\_\-process)}
+\label{glossy_8h_ab3b97b89eeb2a5153c9a721b98448372}
+
+\item 
+void \hyperlink{group__glossy__main_ga3b8821abe2625c08305cba82200bf67b}{glossy\_\-start} (uint8\_\-t $\ast$data\_\-, uint8\_\-t data\_\-len\_\-, uint8\_\-t initiator\_\-, uint8\_\-t sync\_\-, uint8\_\-t tx\_\-max\_\-)
+\begin{DoxyCompactList}\small\item\em Start Glossy and stall all other application tasks. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__main_ga708d908317af37345a810942271bda8c}{glossy\_\-stop} (void)
+\begin{DoxyCompactList}\small\item\em Stop Glossy and resume all other application tasks. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__main_gab2e2126a4762a97c6396ce51221eaea7}{get\_\-rx\_\-cnt} (void)
+\begin{DoxyCompactList}\small\item\em Get the last received counter. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__main_ga16ddcf3313115b5697723299590ca8f5}{get\_\-state} (void)
+\begin{DoxyCompactList}\small\item\em Get the current Glossy state. \end{DoxyCompactList}\item 
+rtimer\_\-clock\_\-t \hyperlink{group__glossy__main_ga88daf788efaacdc2705c58a822d97129}{get\_\-t\_\-first\_\-rx\_\-l} (void)
+\begin{DoxyCompactList}\small\item\em Get low-\/frequency time of first packet reception during the last Glossy phase. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__sync_ga2cb03b56f27f6f7f0b4ebf0ec6ba8333}{get\_\-relay\_\-cnt} (void)
+\begin{DoxyCompactList}\small\item\em Get the last relay counter. \end{DoxyCompactList}\item 
+rtimer\_\-clock\_\-t \hyperlink{group__glossy__sync_ga00e1a87bdb504b0819a7b5d6c637eaa8}{get\_\-T\_\-slot\_\-h} (void)
+\begin{DoxyCompactList}\small\item\em Get the local estimation of T\_\-slot, in DCO clock ticks. \end{DoxyCompactList}\item 
+rtimer\_\-clock\_\-t \hyperlink{group__glossy__sync_gaa37a5474c90f7747d0f5054dc1a03764}{get\_\-t\_\-ref\_\-l} (void)
+\begin{DoxyCompactList}\small\item\em Get low-\/frequency synchronization reference time. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__sync_gae7e475746ec86ae6dd8ca9ece642faf8}{is\_\-t\_\-ref\_\-l\_\-updated} (void)
+\begin{DoxyCompactList}\small\item\em Provide information about current synchronization status. \end{DoxyCompactList}\item 
+void \hyperlink{group__glossy__sync_gac14ac43f69412b67d2d326b32c2d9014}{set\_\-t\_\-ref\_\-l} (rtimer\_\-clock\_\-t t)
+\begin{DoxyCompactList}\small\item\em Set low-\/frequency synchronization reference time. \end{DoxyCompactList}\item 
+void \hyperlink{group__glossy__sync_ga189faa7cc7395e8895e1ddcbd645f14e}{set\_\-t\_\-ref\_\-l\_\-updated} (uint8\_\-t updated)
+\begin{DoxyCompactList}\small\item\em Set the current synchronization status. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy__timeouts_gaf65d041af0217771bc6177a829c0e490}{
+void {\bfseries glossy\_\-schedule\_\-rx\_\-timeout} (void)}
+\label{group__glossy__timeouts_gaf65d041af0217771bc6177a829c0e490}
+
+\item 
+\hypertarget{group__glossy__timeouts_ga8bfbcadfe82f03bd255d4769d60b1257}{
+void {\bfseries glossy\_\-stop\_\-rx\_\-timeout} (void)}
+\label{group__glossy__timeouts_ga8bfbcadfe82f03bd255d4769d60b1257}
+
+\item 
+\hypertarget{group__glossy__timeouts_ga644979b6e29ab398f19bde3502e31fa2}{
+void {\bfseries glossy\_\-schedule\_\-initiator\_\-timeout} (void)}
+\label{group__glossy__timeouts_ga644979b6e29ab398f19bde3502e31fa2}
+
+\item 
+\hypertarget{group__glossy__timeouts_gab9b5f738a3d4732bdf8c2fb271200f91}{
+void {\bfseries glossy\_\-stop\_\-initiator\_\-timeout} (void)}
+\label{group__glossy__timeouts_gab9b5f738a3d4732bdf8c2fb271200f91}
+
+\item 
+\hypertarget{group__glossy__interrupts_ga82802b6993a2232c7d3bfa5f990847d5}{
+void {\bfseries glossy\_\-begin\_\-rx} (void)}
+\label{group__glossy__interrupts_ga82802b6993a2232c7d3bfa5f990847d5}
+
+\item 
+\hypertarget{group__glossy__interrupts_ga9eb72a239fb27960c4e3422e08967632}{
+void {\bfseries glossy\_\-end\_\-rx} (void)}
+\label{group__glossy__interrupts_ga9eb72a239fb27960c4e3422e08967632}
+
+\item 
+\hypertarget{group__glossy__interrupts_gaf7bf518d79b5d9abe3d5f32765c9764d}{
+void {\bfseries glossy\_\-begin\_\-tx} (void)}
+\label{group__glossy__interrupts_gaf7bf518d79b5d9abe3d5f32765c9764d}
+
+\item 
+\hypertarget{group__glossy__interrupts_ga0f1f14610a1d1c52083d373f0179afad}{
+void {\bfseries glossy\_\-end\_\-tx} (void)}
+\label{group__glossy__interrupts_ga0f1f14610a1d1c52083d373f0179afad}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Glossy core, header file. \begin{DoxyAuthor}{Author}
+Federico Ferrari $<$\href{mailto:ferrari@tik.ee.ethz.ch}{\tt ferrari@tik.ee.ethz.ch}$>$
+\end{DoxyAuthor}
+
+
+\subsection{Define Documentation}
+\hypertarget{glossy_8h_a0178fa0350084350f45ae1b841579f77}{
+\index{glossy.h@{glossy.h}!CLOCK\_\-PHI@{CLOCK\_\-PHI}}
+\index{CLOCK\_\-PHI@{CLOCK\_\-PHI}!glossy.h@{glossy.h}}
+\subsubsection[{CLOCK\_\-PHI}]{\setlength{\rightskip}{0pt plus 5cm}\#define CLOCK\_\-PHI~(F\_\-CPU / RTIMER\_\-SECOND)}}
+\label{glossy_8h_a0178fa0350084350f45ae1b841579f77}
+Ratio between the frequencies of the DCO and the low-\/frequency clocks \hypertarget{glossy_8h_ae31848a1e9c6273e473f23549160097d}{
+\index{glossy.h@{glossy.h}!GLOSSY\_\-DEBUG@{GLOSSY\_\-DEBUG}}
+\index{GLOSSY\_\-DEBUG@{GLOSSY\_\-DEBUG}!glossy.h@{glossy.h}}
+\subsubsection[{GLOSSY\_\-DEBUG}]{\setlength{\rightskip}{0pt plus 5cm}\#define GLOSSY\_\-DEBUG~0}}
+\label{glossy_8h_ae31848a1e9c6273e473f23549160097d}
+If not zero, nodes print additional debug information (disabled by default). \hypertarget{glossy_8h_a6ad8afd99fb11d9b80fb684574b64153}{
+\index{glossy.h@{glossy.h}!GLOSSY\_\-INITIATOR\_\-TIMEOUT@{GLOSSY\_\-INITIATOR\_\-TIMEOUT}}
+\index{GLOSSY\_\-INITIATOR\_\-TIMEOUT@{GLOSSY\_\-INITIATOR\_\-TIMEOUT}!glossy.h@{glossy.h}}
+\subsubsection[{GLOSSY\_\-INITIATOR\_\-TIMEOUT}]{\setlength{\rightskip}{0pt plus 5cm}\#define GLOSSY\_\-INITIATOR\_\-TIMEOUT~(3 $\ast$ T\_\-slot\_\-h)}}
+\label{glossy_8h_a6ad8afd99fb11d9b80fb684574b64153}
+Initiator timeout, in DCO clock ticks. When the timeout expires, if the initiator has not received any packet after its first transmission it transmits again. \hypertarget{glossy_8h_a5720943ed00b64a3aa851da6d871548f}{
+\index{glossy.h@{glossy.h}!GLOSSY\_\-SYNC\_\-WINDOW@{GLOSSY\_\-SYNC\_\-WINDOW}}
+\index{GLOSSY\_\-SYNC\_\-WINDOW@{GLOSSY\_\-SYNC\_\-WINDOW}!glossy.h@{glossy.h}}
+\subsubsection[{GLOSSY\_\-SYNC\_\-WINDOW}]{\setlength{\rightskip}{0pt plus 5cm}\#define GLOSSY\_\-SYNC\_\-WINDOW~64}}
+\label{glossy_8h_a5720943ed00b64a3aa851da6d871548f}
+Size of the window used to average estimations of slot lengths. \hypertarget{glossy_8h_a487e29fa0e13ab7964475f9390297b98}{
+\index{glossy.h@{glossy.h}!MAX\_\-VALID\_\-RELAY\_\-CNT@{MAX\_\-VALID\_\-RELAY\_\-CNT}}
+\index{MAX\_\-VALID\_\-RELAY\_\-CNT@{MAX\_\-VALID\_\-RELAY\_\-CNT}!glossy.h@{glossy.h}}
+\subsubsection[{MAX\_\-VALID\_\-RELAY\_\-CNT}]{\setlength{\rightskip}{0pt plus 5cm}\#define MAX\_\-VALID\_\-RELAY\_\-CNT~200}}
+\label{glossy_8h_a487e29fa0e13ab7964475f9390297b98}
+If the relay counter has this or a higher value, do not use it for synchronization. 
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{glossy_8h_ac2573e60f03b983302456e2f6dc36c8e}{
+\index{glossy.h@{glossy.h}!glossy\_\-state@{glossy\_\-state}}
+\index{glossy\_\-state@{glossy\_\-state}!glossy.h@{glossy.h}}
+\subsubsection[{glossy\_\-state}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf glossy\_\-state}}}
+\label{glossy_8h_ac2573e60f03b983302456e2f6dc36c8e}
+List of possible Glossy states. \begin{Desc}
+\item[Enumerator: ]\par
+\begin{description}
+\index{GLOSSY\_\-STATE\_\-OFF@{GLOSSY\_\-STATE\_\-OFF}!glossy.h@{glossy.h}}\index{glossy.h@{glossy.h}!GLOSSY\_\-STATE\_\-OFF@{GLOSSY\_\-STATE\_\-OFF}}\item[{\em 
+\hypertarget{glossy_8h_ac2573e60f03b983302456e2f6dc36c8ea333786e842baedddf38273c50c984527}{
+GLOSSY\_\-STATE\_\-OFF}
+\label{glossy_8h_ac2573e60f03b983302456e2f6dc36c8ea333786e842baedddf38273c50c984527}
+}]Glossy is not executing \index{GLOSSY\_\-STATE\_\-WAITING@{GLOSSY\_\-STATE\_\-WAITING}!glossy.h@{glossy.h}}\index{glossy.h@{glossy.h}!GLOSSY\_\-STATE\_\-WAITING@{GLOSSY\_\-STATE\_\-WAITING}}\item[{\em 
+\hypertarget{glossy_8h_ac2573e60f03b983302456e2f6dc36c8eae1d1f2321661e98808d63085307e406a}{
+GLOSSY\_\-STATE\_\-WAITING}
+\label{glossy_8h_ac2573e60f03b983302456e2f6dc36c8eae1d1f2321661e98808d63085307e406a}
+}]Glossy is waiting for a packet being flooded \index{GLOSSY\_\-STATE\_\-RECEIVING@{GLOSSY\_\-STATE\_\-RECEIVING}!glossy.h@{glossy.h}}\index{glossy.h@{glossy.h}!GLOSSY\_\-STATE\_\-RECEIVING@{GLOSSY\_\-STATE\_\-RECEIVING}}\item[{\em 
+\hypertarget{glossy_8h_ac2573e60f03b983302456e2f6dc36c8ea19b609b975e3516dbb2696f576c8ab4d}{
+GLOSSY\_\-STATE\_\-RECEIVING}
+\label{glossy_8h_ac2573e60f03b983302456e2f6dc36c8ea19b609b975e3516dbb2696f576c8ab4d}
+}]Glossy is receiving a packet \index{GLOSSY\_\-STATE\_\-RECEIVED@{GLOSSY\_\-STATE\_\-RECEIVED}!glossy.h@{glossy.h}}\index{glossy.h@{glossy.h}!GLOSSY\_\-STATE\_\-RECEIVED@{GLOSSY\_\-STATE\_\-RECEIVED}}\item[{\em 
+\hypertarget{glossy_8h_ac2573e60f03b983302456e2f6dc36c8eaddc89cdc977b0b1bb91480dd40560e73}{
+GLOSSY\_\-STATE\_\-RECEIVED}
+\label{glossy_8h_ac2573e60f03b983302456e2f6dc36c8eaddc89cdc977b0b1bb91480dd40560e73}
+}]Glossy has just finished receiving a packet \index{GLOSSY\_\-STATE\_\-TRANSMITTING@{GLOSSY\_\-STATE\_\-TRANSMITTING}!glossy.h@{glossy.h}}\index{glossy.h@{glossy.h}!GLOSSY\_\-STATE\_\-TRANSMITTING@{GLOSSY\_\-STATE\_\-TRANSMITTING}}\item[{\em 
+\hypertarget{glossy_8h_ac2573e60f03b983302456e2f6dc36c8eab0cf79ba44610d2e2112ca5e446f7b67}{
+GLOSSY\_\-STATE\_\-TRANSMITTING}
+\label{glossy_8h_ac2573e60f03b983302456e2f6dc36c8eab0cf79ba44610d2e2112ca5e446f7b67}
+}]Glossy is transmitting a packet \index{GLOSSY\_\-STATE\_\-TRANSMITTED@{GLOSSY\_\-STATE\_\-TRANSMITTED}!glossy.h@{glossy.h}}\index{glossy.h@{glossy.h}!GLOSSY\_\-STATE\_\-TRANSMITTED@{GLOSSY\_\-STATE\_\-TRANSMITTED}}\item[{\em 
+\hypertarget{glossy_8h_ac2573e60f03b983302456e2f6dc36c8eaa5ac3a78fea5a59b7b60af0286809fbc}{
+GLOSSY\_\-STATE\_\-TRANSMITTED}
+\label{glossy_8h_ac2573e60f03b983302456e2f6dc36c8eaa5ac3a78fea5a59b7b60af0286809fbc}
+}]Glossy has just finished transmitting a packet \index{GLOSSY\_\-STATE\_\-ABORTED@{GLOSSY\_\-STATE\_\-ABORTED}!glossy.h@{glossy.h}}\index{glossy.h@{glossy.h}!GLOSSY\_\-STATE\_\-ABORTED@{GLOSSY\_\-STATE\_\-ABORTED}}\item[{\em 
+\hypertarget{glossy_8h_ac2573e60f03b983302456e2f6dc36c8ea9c18d95b12e5053ec7d0b20c3686de4a}{
+GLOSSY\_\-STATE\_\-ABORTED}
+\label{glossy_8h_ac2573e60f03b983302456e2f6dc36c8ea9c18d95b12e5053ec7d0b20c3686de4a}
+}]Glossy has just aborted a packet reception \end{description}
+\end{Desc}
+

@@ -60,7 +60,10 @@
  * \brief NodeId of the initiator.
  *        Default value: 1
  */
+
+#ifndef INITIATOR_NODE_ID
 #define INITIATOR_NODE_ID       1
+#endif
 
 /**
  * \brief Application-specific header.
@@ -78,13 +81,13 @@
  * \brief Period with which a Glossy phase is scheduled.
  *        Default value: 250 ms.
  */
-#define GLOSSY_PERIOD           (RTIMER_SECOND / 4)      // 250 ms
+#define GLOSSY_PERIOD           (RTIMER_SECOND / 2)      // 500 ms
 
 /**
  * \brief Duration of each Glossy phase.
  *        Default value: 20 ms.
  */
-#define GLOSSY_DURATION         (RTIMER_SECOND / 50)     //  20 ms
+#define GLOSSY_DURATION         (RTIMER_SECOND / 25)     //  40 ms
 
 /**
  * \brief Guard-time at receivers.
@@ -125,7 +128,8 @@
  * \brief Data structure used to represent flooding data.
  */
 typedef struct {
-	unsigned long seq_no; /**< Sequence number, incremented by the initiator at each Glossy phase. */
+    unsigned long seq_no; /**< Sequence number, incremented by the initiator at each Glossy phase. */
+    char foo[100];
 } glossy_data_struct;
 
 /** @} */

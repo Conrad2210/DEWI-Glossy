@@ -80,6 +80,7 @@ rtimer_set(struct rtimer *rtimer, rtimer_clock_t time,
 
   rtimer->func = func;
   rtimer->ptr = ptr;
+  rtimer->overflows_to_go = 0;
 
   rtimer->time = time;
   next_rtimer = rtimer;
@@ -90,6 +91,42 @@ rtimer_set(struct rtimer *rtimer, rtimer_clock_t time,
   return RTIMER_OK;
 }
 /*---------------------------------------------------------------------------*/
+int
+rtimer_set_long(struct rtimer *rtimer, rtimer_clock_t ref_time, unsigned long offset,
+	   rtimer_callback_t func, void *ptr)
+{
+  if(next_rtimer == NULL) {
+    rtimer->func = func;
+    rtimer->ptr = ptr;
+    rtimer->time = ref_time + offset;
+    next_rtimer = rtimer;
+
+    // it is assumed here that the timer is scheduled within 2 seconds after ref_time
+    if (offset < (unsigned long)RTIMER_SECOND * 2) {
+    	rtimer->overflows_to_go = 0;
+    } else {
+        rtimer_clock_t now = RTIMER_NOW();
+        rtimer->overflows_to_go = (offset - (now - ref_time)) >> 16;
+        // It should never happen, but to be sure...
+        if (rtimer->overflows_to_go == 0xffff) {
+        	rtimer->overflows_to_go = 0;
+        }
+    }
+	rtimer_arch_schedule(ref_time + (rtimer_clock_t)offset);
+
+//    printf("now %u, ref_time %u, offset %lu, TACCR0 %u\n",
+//     		now, ref_time, offset, TACCR0);
+  }
+  return RTIMER_OK;
+}
+/*---------------------------------------------------------------------------*/
+// This is not platform independent
+//unsigned long
+//rtimer_time_to_expire(void) {
+//	return (unsigned long)(TACCR0 - RTIMER_NOW()) +
+//			((unsigned long)next_rtimer->overflows_to_go << 16);
+//}
+/*---------------------------------------------------------------------------*/
 void
 rtimer_run_next(void)
 {
@@ -99,7 +136,14 @@ rtimer_run_next(void)
   }
   t = next_rtimer;
   next_rtimer = NULL;
-  t->func(t, t->ptr);
+  if (t->overflows_to_go == 0) {
+	  // no more overflows to wait for
+	  t->func(t, t->ptr);
+  } else {
+	  // we still have to wait for more timer overflows
+	  t->overflows_to_go--;
+	  next_rtimer = t;
+  }
   if(next_rtimer != NULL) {
     rtimer_arch_schedule(next_rtimer->time);
   }

@@ -1,0 +1,111 @@
+\hypertarget{glossy-test_8c}{
+\section{apps/glossy/glossy-\/test.c File Reference}
+\label{glossy-test_8c}\index{apps/glossy/glossy-\/test.c@{apps/glossy/glossy-\/test.c}}
+}
+{\ttfamily \#include \char`\"{}glossy-\/test.h\char`\"{}}\par
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__glossy-test-print-stats_ga10726d2aa7b149ad5485888bba70177c}{
+{\bfseries PROCESS} (glossy\_\-print\_\-stats\_\-process,\char`\"{}Glossy print stats\char`\"{})}
+\label{group__glossy-test-print-stats_ga10726d2aa7b149ad5485888bba70177c}
+
+\item 
+\hypertarget{group__glossy-test-print-stats_gad8f76fdcda797bef20444c5e4ee181c5}{
+{\bfseries PROCESS\_\-THREAD} (glossy\_\-print\_\-stats\_\-process, ev, data)}
+\label{group__glossy-test-print-stats_gad8f76fdcda797bef20444c5e4ee181c5}
+
+\item 
+\hypertarget{group__glossy-test-skew_ga0bf2ebfd243be5dc3cea2083c55d3f75}{
+static void {\bfseries estimate\_\-period\_\-skew} (void)}
+\label{group__glossy-test-skew_ga0bf2ebfd243be5dc3cea2083c55d3f75}
+
+\item 
+\hypertarget{group__glossy-test-scheduler_gaaf560632558b0a7395e5bc21090c04a4}{
+char {\bfseries glossy\_\-scheduler} (struct rtimer $\ast$t, void $\ast$ptr)}
+\label{group__glossy-test-scheduler_gaaf560632558b0a7395e5bc21090c04a4}
+
+\item 
+\hypertarget{group__glossy-test-init_gaedc8ea09700fab6ffa609345ef21407d}{
+{\bfseries PROCESS} (glossy\_\-test,\char`\"{}Glossy test\char`\"{})}
+\label{group__glossy-test-init_gaedc8ea09700fab6ffa609345ef21407d}
+
+\item 
+\hypertarget{group__glossy-test-init_ga017ea7392ceaa675dbf770b2fbe13097}{
+{\bfseries PROCESS\_\-THREAD} (glossy\_\-test, ev, data)}
+\label{group__glossy-test-init_ga017ea7392ceaa675dbf770b2fbe13097}
+
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__glossy-test-variables-sched-sync_ga6bbf497010a2f415af13dbc5c4910f02}{
+static \hyperlink{structglossy__data__struct}{glossy\_\-data\_\-struct} \hyperlink{group__glossy-test-variables-sched-sync_ga6bbf497010a2f415af13dbc5c4910f02}{glossy\_\-data}}
+\label{group__glossy-test-variables-sched-sync_ga6bbf497010a2f415af13dbc5c4910f02}
+
+\begin{DoxyCompactList}\small\item\em Flooding data. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-sched-sync_ga1d5d05d50b1e23d2c49218d89872754b}{
+static struct rtimer \hyperlink{group__glossy-test-variables-sched-sync_ga1d5d05d50b1e23d2c49218d89872754b}{rt}}
+\label{group__glossy-test-variables-sched-sync_ga1d5d05d50b1e23d2c49218d89872754b}
+
+\begin{DoxyCompactList}\small\item\em Rtimer used to schedule Glossy. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-sched-sync_gaf04269db7f30a16bc4016d3b2ae134d5}{
+static struct \hyperlink{group__glossy-test-variables-sched-sync_gaf04269db7f30a16bc4016d3b2ae134d5}{pt} \hyperlink{group__glossy-test-variables-sched-sync_gaf04269db7f30a16bc4016d3b2ae134d5}{pt}}
+\label{group__glossy-test-variables-sched-sync_gaf04269db7f30a16bc4016d3b2ae134d5}
+
+\begin{DoxyCompactList}\small\item\em Protothread used to schedule Glossy. \end{DoxyCompactList}\item 
+static rtimer\_\-clock\_\-t \hyperlink{group__glossy-test-variables-sched-sync_ga46f9e2e4e895cd040435c428e7915b22}{t\_\-ref\_\-l\_\-old} = 0
+\begin{DoxyCompactList}\small\item\em Reference time computed from the Glossy phase before the last one. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-sched-sync_ga8f7aae7ff4364a1481312cef44f65f73}{
+static uint8\_\-t \hyperlink{group__glossy-test-variables-sched-sync_ga8f7aae7ff4364a1481312cef44f65f73}{skew\_\-estimated} = 0}
+\label{group__glossy-test-variables-sched-sync_ga8f7aae7ff4364a1481312cef44f65f73}
+
+\begin{DoxyCompactList}\small\item\em Not zero if the clock skew over a period of length \hyperlink{group__glossy-test-settings_ga6f68058577fdbfccbd8e50537609a5e4}{GLOSSY\_\-PERIOD} has already been estimated. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-sched-sync_ga60cbfbbe9faa75c911015ad30087933f}{
+static uint8\_\-t \hyperlink{group__glossy-test-variables-sched-sync_ga60cbfbbe9faa75c911015ad30087933f}{sync\_\-missed} = 0}
+\label{group__glossy-test-variables-sched-sync_ga60cbfbbe9faa75c911015ad30087933f}
+
+\begin{DoxyCompactList}\small\item\em Current number of consecutive phases without synchronization (reference time not computed). \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-sched-sync_gac9559510e6d21818f3566cd7429aaca8}{
+static rtimer\_\-clock\_\-t \hyperlink{group__glossy-test-variables-sched-sync_gac9559510e6d21818f3566cd7429aaca8}{t\_\-start} = 0}
+\label{group__glossy-test-variables-sched-sync_gac9559510e6d21818f3566cd7429aaca8}
+
+\begin{DoxyCompactList}\small\item\em Starting time (low-\/frequency clock) of the last Glossy phase. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-sched-sync_ga6168dc578395ee973d219267d7bf97b5}{
+static int \hyperlink{group__glossy-test-variables-sched-sync_ga6168dc578395ee973d219267d7bf97b5}{period\_\-skew} = 0}
+\label{group__glossy-test-variables-sched-sync_ga6168dc578395ee973d219267d7bf97b5}
+
+\begin{DoxyCompactList}\small\item\em Current estimation of clock skew over a period of length \hyperlink{group__glossy-test-settings_ga6f68058577fdbfccbd8e50537609a5e4}{GLOSSY\_\-PERIOD}. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-stats_ga054c8218353e2ee195a4a8bbea380a95}{
+static unsigned long \hyperlink{group__glossy-test-variables-stats_ga054c8218353e2ee195a4a8bbea380a95}{packets\_\-received} = 0}
+\label{group__glossy-test-variables-stats_ga054c8218353e2ee195a4a8bbea380a95}
+
+\begin{DoxyCompactList}\small\item\em Current number of received packets. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-stats_ga1f7d22828e5e1c2a13c4dcd71a000420}{
+static unsigned long \hyperlink{group__glossy-test-variables-stats_ga1f7d22828e5e1c2a13c4dcd71a000420}{packets\_\-missed} = 0}
+\label{group__glossy-test-variables-stats_ga1f7d22828e5e1c2a13c4dcd71a000420}
+
+\begin{DoxyCompactList}\small\item\em Current number of missed packets. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-stats_gaad9aca10bbb196083acdc1981d5502b5}{
+static unsigned long \hyperlink{group__glossy-test-variables-stats_gaad9aca10bbb196083acdc1981d5502b5}{latency} = 0}
+\label{group__glossy-test-variables-stats_gaad9aca10bbb196083acdc1981d5502b5}
+
+\begin{DoxyCompactList}\small\item\em Latency of last Glossy phase, in us. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-stats_gac156624836ae9355d8f554bf0969254b}{
+static unsigned long \hyperlink{group__glossy-test-variables-stats_gac156624836ae9355d8f554bf0969254b}{sum\_\-latency} = 0}
+\label{group__glossy-test-variables-stats_gac156624836ae9355d8f554bf0969254b}
+
+\begin{DoxyCompactList}\small\item\em Current sum of latencies, in ticks of low-\/frequency clock (used to compute average). \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-init_ga32cc397a384ec81c0310150a939756f7}{
+AUTOSTART\_\-PROCESSES \& {\bfseries glossy\_\-test}}
+\label{group__glossy-test-init_ga32cc397a384ec81c0310150a939756f7}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A simple example of an application that uses Glossy, source file.
+
+\begin{DoxyAuthor}{Author}
+Federico Ferrari $<$\href{mailto:ferrari@tik.ee.ethz.ch}{\tt ferrari@tik.ee.ethz.ch}$>$ 
+\end{DoxyAuthor}

@@ -1,0 +1,49 @@
+\hypertarget{group__glossy__capture}{
+\section{Timer capture of clock ticks}
+\label{group__glossy__capture}\index{Timer capture of clock ticks@{Timer capture of clock ticks}}
+}
+\subsection*{Defines}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__glossy__capture_ga1ba6973ff6fa6b3ee590efc341ea62eb}{CAPTURE\_\-NEXT\_\-CLOCK\_\-TICK}(t\_\-cap\_\-h, t\_\-cap\_\-l)
+\begin{DoxyCompactList}\small\item\em Capture next low-\/frequency clock tick and DCO clock value at that instant. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Define Documentation}
+\hypertarget{group__glossy__capture_ga1ba6973ff6fa6b3ee590efc341ea62eb}{
+\index{Timer capture of clock ticks@{Timer capture of clock ticks}!CAPTURE\_\-NEXT\_\-CLOCK\_\-TICK@{CAPTURE\_\-NEXT\_\-CLOCK\_\-TICK}}
+\index{CAPTURE\_\-NEXT\_\-CLOCK\_\-TICK@{CAPTURE\_\-NEXT\_\-CLOCK\_\-TICK}!Timer capture of clock ticks@{Timer capture of clock ticks}}
+\subsubsection[{CAPTURE\_\-NEXT\_\-CLOCK\_\-TICK}]{\setlength{\rightskip}{0pt plus 5cm}\#define CAPTURE\_\-NEXT\_\-CLOCK\_\-TICK(
+\begin{DoxyParamCaption}
+\item[{}]{t\_\-cap\_\-h, }
+\item[{}]{t\_\-cap\_\-l}
+\end{DoxyParamCaption}
+)}}
+\label{group__glossy__capture_ga1ba6973ff6fa6b3ee590efc341ea62eb}
+{\bfseries Value:}
+\begin{DoxyCode}
+do {\
+                /* Enable capture mode for timers B6 and A2 (ACLK) */\
+                TBCCTL6 = CCIS0 | CM_POS | CAP | SCS; \
+                TACCTL2 = CCIS0 | CM_POS | CAP | SCS; \
+                /* Wait until both timers capture the next clock tick */\
+                while (!((TBCCTL6 & CCIFG) && (TACCTL2 & CCIFG))); \
+                /* Store the capture timer values */\
+                t_cap_h = TBCCR6; \
+                t_cap_l = TACCR2; \
+                /* Disable capture mode */\
+                TBCCTL6 = 0; \
+                TACCTL2 = 0; \
+} while (0)
+\end{DoxyCode}
+
+
+Capture next low-\/frequency clock tick and DCO clock value at that instant. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t\_\-cap\_\-h} & variable for storing value of DCO clock value \\
+\hline
+{\em t\_\-cap\_\-l} & variable for storing value of low-\/frequency clock value \\
+\hline
+\end{DoxyParams}

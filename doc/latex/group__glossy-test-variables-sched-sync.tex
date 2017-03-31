@@ -1,0 +1,59 @@
+\hypertarget{group__glossy-test-variables-sched-sync}{
+\section{Scheduling and synchronization variables}
+\label{group__glossy-test-variables-sched-sync}\index{Scheduling and synchronization variables@{Scheduling and synchronization variables}}
+}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__glossy-test-variables-sched-sync_ga6bbf497010a2f415af13dbc5c4910f02}{
+static \hyperlink{structglossy__data__struct}{glossy\_\-data\_\-struct} \hyperlink{group__glossy-test-variables-sched-sync_ga6bbf497010a2f415af13dbc5c4910f02}{glossy\_\-data}}
+\label{group__glossy-test-variables-sched-sync_ga6bbf497010a2f415af13dbc5c4910f02}
+
+\begin{DoxyCompactList}\small\item\em Flooding data. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-sched-sync_ga1d5d05d50b1e23d2c49218d89872754b}{
+static struct rtimer \hyperlink{group__glossy-test-variables-sched-sync_ga1d5d05d50b1e23d2c49218d89872754b}{rt}}
+\label{group__glossy-test-variables-sched-sync_ga1d5d05d50b1e23d2c49218d89872754b}
+
+\begin{DoxyCompactList}\small\item\em Rtimer used to schedule Glossy. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-sched-sync_gaf04269db7f30a16bc4016d3b2ae134d5}{
+static struct \hyperlink{group__glossy-test-variables-sched-sync_gaf04269db7f30a16bc4016d3b2ae134d5}{pt} \hyperlink{group__glossy-test-variables-sched-sync_gaf04269db7f30a16bc4016d3b2ae134d5}{pt}}
+\label{group__glossy-test-variables-sched-sync_gaf04269db7f30a16bc4016d3b2ae134d5}
+
+\begin{DoxyCompactList}\small\item\em Protothread used to schedule Glossy. \end{DoxyCompactList}\item 
+static rtimer\_\-clock\_\-t \hyperlink{group__glossy-test-variables-sched-sync_ga46f9e2e4e895cd040435c428e7915b22}{t\_\-ref\_\-l\_\-old} = 0
+\begin{DoxyCompactList}\small\item\em Reference time computed from the Glossy phase before the last one. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-sched-sync_ga8f7aae7ff4364a1481312cef44f65f73}{
+static uint8\_\-t \hyperlink{group__glossy-test-variables-sched-sync_ga8f7aae7ff4364a1481312cef44f65f73}{skew\_\-estimated} = 0}
+\label{group__glossy-test-variables-sched-sync_ga8f7aae7ff4364a1481312cef44f65f73}
+
+\begin{DoxyCompactList}\small\item\em Not zero if the clock skew over a period of length \hyperlink{group__glossy-test-settings_ga6f68058577fdbfccbd8e50537609a5e4}{GLOSSY\_\-PERIOD} has already been estimated. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-sched-sync_ga60cbfbbe9faa75c911015ad30087933f}{
+static uint8\_\-t \hyperlink{group__glossy-test-variables-sched-sync_ga60cbfbbe9faa75c911015ad30087933f}{sync\_\-missed} = 0}
+\label{group__glossy-test-variables-sched-sync_ga60cbfbbe9faa75c911015ad30087933f}
+
+\begin{DoxyCompactList}\small\item\em Current number of consecutive phases without synchronization (reference time not computed). \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-sched-sync_gac9559510e6d21818f3566cd7429aaca8}{
+static rtimer\_\-clock\_\-t \hyperlink{group__glossy-test-variables-sched-sync_gac9559510e6d21818f3566cd7429aaca8}{t\_\-start} = 0}
+\label{group__glossy-test-variables-sched-sync_gac9559510e6d21818f3566cd7429aaca8}
+
+\begin{DoxyCompactList}\small\item\em Starting time (low-\/frequency clock) of the last Glossy phase. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-variables-sched-sync_ga6168dc578395ee973d219267d7bf97b5}{
+static int \hyperlink{group__glossy-test-variables-sched-sync_ga6168dc578395ee973d219267d7bf97b5}{period\_\-skew} = 0}
+\label{group__glossy-test-variables-sched-sync_ga6168dc578395ee973d219267d7bf97b5}
+
+\begin{DoxyCompactList}\small\item\em Current estimation of clock skew over a period of length \hyperlink{group__glossy-test-settings_ga6f68058577fdbfccbd8e50537609a5e4}{GLOSSY\_\-PERIOD}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Variable Documentation}
+\hypertarget{group__glossy-test-variables-sched-sync_ga46f9e2e4e895cd040435c428e7915b22}{
+\index{Scheduling and synchronization variables@{Scheduling and synchronization variables}!t\_\-ref\_\-l\_\-old@{t\_\-ref\_\-l\_\-old}}
+\index{t\_\-ref\_\-l\_\-old@{t\_\-ref\_\-l\_\-old}!Scheduling and synchronization variables@{Scheduling and synchronization variables}}
+\subsubsection[{t\_\-ref\_\-l\_\-old}]{\setlength{\rightskip}{0pt plus 5cm}rtimer\_\-clock\_\-t {\bf t\_\-ref\_\-l\_\-old} = 0\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{group__glossy-test-variables-sched-sync_ga46f9e2e4e895cd040435c428e7915b22}
+
+
+Reference time computed from the Glossy phase before the last one. 
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__glossy__sync_gaa37a5474c90f7747d0f5054dc1a03764}{get\_\-t\_\-ref\_\-l} 
+\end{DoxySeeAlso}

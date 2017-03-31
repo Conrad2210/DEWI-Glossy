@@ -4,13 +4,17 @@
 #ifndef CONTIKI_CONF_H
 #define CONTIKI_CONF_H
 
-// set COOJA to 1 for simulating Glossy in Cooja
-#define COOJA 0
-#define TINYOS_SERIAL_FRAMES 0
-
 #ifndef RF_CHANNEL
-#define RF_CHANNEL              26
-#endif /* RF_CHANNEL */
+#define RF_CHANNEL 26
+#endif
+
+
+#if TINYOS
+#define TINYOS_SERIAL_FRAMES 1
+#endif
+#ifndef ENERGEST_DIV
+#define ENERGEST_DIV 1
+#endif /* ENERGEST_DIV */
 
 #define ENERGEST_CONF_ON 1
 

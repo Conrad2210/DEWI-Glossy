@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>Glossy: /Users/fe/ETH/Contiki/contikiprojects/ethz.ch/glossy/core/dev/glossy.c File Reference</title>
+<title>Glossy: core/dev/glossy.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
@@ -59,23 +59,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
-<a href="#define-members">Defines</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
-<div class="title">/Users/fe/ETH/Contiki/contikiprojects/ethz.ch/glossy/core/dev/glossy.c File Reference<div class="ingroups"><a class="el" href="group__glossy__interface.html">Glossy API</a> &#124; <a class="el" href="group__glossy__internal.html">Glossy internal functions</a></div></div>  </div>
+<div class="title">core/dev/glossy.c File Reference<div class="ingroups"><a class="el" href="group__glossy__interface.html">Glossy API</a> &#124; <a class="el" href="group__glossy__internal.html">Glossy internal functions</a></div></div>  </div>
 </div>
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="glossy_8h_source.html">glossy.h</a>&quot;</code><br/>
 </div><table class="memberdecls">
-<tr><td colspan="2"><h2><a name="define-members"></a>
-Defines</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a057a38f6929db92c5fac024888cdee9f"></a><!-- doxytag: member="glossy.c::CM_POS" ref="a057a38f6929db92c5fac024888cdee9f" args="" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>CM_POS</b>&#160;&#160;&#160;CM_1</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2eeb26f795626627b6f2740c711c89b6"></a><!-- doxytag: member="glossy.c::CM_NEG" ref="a2eeb26f795626627b6f2740c711c89b6" args="" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>CM_NEG</b>&#160;&#160;&#160;CM_2</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe275e54dc4064d17dad69588f753256"></a><!-- doxytag: member="glossy.c::CM_BOTH" ref="afe275e54dc4064d17dad69588f753256" args="" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>CM_BOTH</b>&#160;&#160;&#160;CM_3</td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a799719d153ea370a09f852bf65d57b03"></a><!-- doxytag: member="glossy.c::radio_flush_tx" ref="a799719d153ea370a09f852bf65d57b03" args="(void)" -->
@@ -106,8 +97,8 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>radio_write_tx
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>glossy_disable_other_interrupts</b> (void)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0bd596df2686ad049609901fb6fe317"></a><!-- doxytag: member="glossy.c::glossy_enable_other_interrupts" ref="ab0bd596df2686ad049609901fb6fe317" args="(void)" -->
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>glossy_enable_other_interrupts</b> (void)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__glossy__main.html#ga77a36ee5792c0a788e096d29974e0015">glossy_start</a> (uint8_t *data_, uint8_t data_len_, uint8_t initiator_, uint8_t sync_, uint8_t tx_max_, uint8_t header_, rtimer_clock_t t_stop_, rtimer_callback_t cb_, struct rtimer *rtimer_, void *ptr_)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Start Glossy and stall all other application tasks.  <a href="group__glossy__main.html#ga77a36ee5792c0a788e096d29974e0015"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__glossy__main.html#ga3b8821abe2625c08305cba82200bf67b">glossy_start</a> (uint8_t *data_, uint8_t data_len_, uint8_t initiator_, uint8_t sync_, uint8_t tx_max_)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Start Glossy and stall all other application tasks.  <a href="group__glossy__main.html#ga3b8821abe2625c08305cba82200bf67b"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__glossy__main.html#ga708d908317af37345a810942271bda8c">glossy_stop</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop Glossy and resume all other application tasks.  <a href="group__glossy__main.html#ga708d908317af37345a810942271bda8c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__glossy__main.html#gab2e2126a4762a97c6396ce51221eaea7">get_rx_cnt</a> (void)</td></tr>
@@ -168,16 +159,10 @@ static uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><b>packet</b
 static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>data_len</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a0e506cb489b6e86a9d84f8a4ab1d29"></a><!-- doxytag: member="glossy.c::packet_len" ref="a0a0e506cb489b6e86a9d84f8a4ab1d29" args="" -->
 static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>packet_len</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a493078ebd708a7e0fcb64138e7570ed7"></a><!-- doxytag: member="glossy.c::packet_len_tmp" ref="a493078ebd708a7e0fcb64138e7570ed7" args="" -->
-static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>packet_len_tmp</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3707517cb22eb26bf33bbb859fb010d2"></a><!-- doxytag: member="glossy.c::header" ref="a3707517cb22eb26bf33bbb859fb010d2" args="" -->
-static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>header</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a364610880fb31514073b63e388bf1011"></a><!-- doxytag: member="glossy.c::bytes_read" ref="a364610880fb31514073b63e388bf1011" args="" -->
 static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>bytes_read</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a945c48499f088716d04325a3f537061e"></a><!-- doxytag: member="glossy.c::tx_relay_cnt_last" ref="a945c48499f088716d04325a3f537061e" args="" -->
 static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>tx_relay_cnt_last</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5f03cbf54993110fc7ce03dce2c11c08"></a><!-- doxytag: member="glossy.c::n_timeouts" ref="a5f03cbf54993110fc7ce03dce2c11c08" args="" -->
-static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_timeouts</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06fcd46097cb1779eaa383a6419cd27d"></a><!-- doxytag: member="glossy.c::state" ref="a06fcd46097cb1779eaa383a6419cd27d" args="" -->
 static volatile uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>state</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afd6a087120c9788c8914f87ae9e8ad43"></a><!-- doxytag: member="glossy.c::t_rx_start" ref="afd6a087120c9788c8914f87ae9e8ad43" args="" -->
@@ -188,20 +173,10 @@ static rtimer_clock_t&#160;</td><td class="memItemRight" valign="bottom"><b>t_rx
 static rtimer_clock_t&#160;</td><td class="memItemRight" valign="bottom"><b>t_tx_start</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a69edf11bc775e88d47ed8948d1611caa"></a><!-- doxytag: member="glossy.c::t_tx_stop" ref="a69edf11bc775e88d47ed8948d1611caa" args="" -->
 static rtimer_clock_t&#160;</td><td class="memItemRight" valign="bottom"><b>t_tx_stop</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9559510e6d21818f3566cd7429aaca8"></a><!-- doxytag: member="glossy.c::t_start" ref="ac9559510e6d21818f3566cd7429aaca8" args="" -->
-static rtimer_clock_t&#160;</td><td class="memItemRight" valign="bottom"><b>t_start</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3753f6b371f23d19d4e6fd510a839e51"></a><!-- doxytag: member="glossy.c::t_rx_timeout" ref="a3753f6b371f23d19d4e6fd510a839e51" args="" -->
 static rtimer_clock_t&#160;</td><td class="memItemRight" valign="bottom"><b>t_rx_timeout</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1a95f38fc8a0b293c0a37397f1feba79"></a><!-- doxytag: member="glossy.c::T_irq" ref="a1a95f38fc8a0b293c0a37397f1feba79" args="" -->
 static rtimer_clock_t&#160;</td><td class="memItemRight" valign="bottom"><b>T_irq</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a939c2b3f4a048fb14177ddc005027ccd"></a><!-- doxytag: member="glossy.c::t_stop" ref="a939c2b3f4a048fb14177ddc005027ccd" args="" -->
-static rtimer_clock_t&#160;</td><td class="memItemRight" valign="bottom"><b>t_stop</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae29cf4e2cc31030390c3b686464972f2"></a><!-- doxytag: member="glossy.c::cb" ref="ae29cf4e2cc31030390c3b686464972f2" args="" -->
-static rtimer_callback_t&#160;</td><td class="memItemRight" valign="bottom"><b>cb</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d88c5f44e799bccf5b240cc84168af8"></a><!-- doxytag: member="glossy.c::rtimer" ref="a4d88c5f44e799bccf5b240cc84168af8" args="" -->
-static struct rtimer *&#160;</td><td class="memItemRight" valign="bottom"><b>rtimer</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="add9af9569af79ec26dd741fb226b38ba"></a><!-- doxytag: member="glossy.c::ptr" ref="add9af9569af79ec26dd741fb226b38ba" args="" -->
-static void *&#160;</td><td class="memItemRight" valign="bottom"><b>ptr</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b2b34681a904fc47367cd8e58400159"></a><!-- doxytag: member="glossy.c::ie1" ref="a3b2b34681a904fc47367cd8e58400159" args="" -->
 static unsigned short&#160;</td><td class="memItemRight" valign="bottom"><b>ie1</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0f3be6e09127b6f9c06cea8b49e31e93"></a><!-- doxytag: member="glossy.c::ie2" ref="a0f3be6e09127b6f9c06cea8b49e31e93" args="" -->
@@ -255,7 +230,7 @@ static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>t_ref_l_upd
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Tue Nov 13 2012 15:19:50 for Glossy by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue May 3 2011 14:15:29 for Glossy by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

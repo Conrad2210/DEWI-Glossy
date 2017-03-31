@@ -1,0 +1,3 @@
+UIP_SOURCES = uip6.c tcpip.c uip-debug.c uiplib.c uip-icmp6.c uip-udp-packet.c uip-ds6.c psock.c
+
+CONTIKI_SOURCEFILES += $(UIP_SOURCES)

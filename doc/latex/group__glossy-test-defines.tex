@@ -1,0 +1,70 @@
+\hypertarget{group__glossy-test-defines}{
+\section{Application internal defines}
+\label{group__glossy-test-defines}\index{Application internal defines@{Application internal defines}}
+}
+\subsection*{Defines}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__glossy-test-defines_gaf02e45f15080b8ec9dd7b286157617ff}{
+\#define \hyperlink{group__glossy-test-defines_gaf02e45f15080b8ec9dd7b286157617ff}{DATA\_\-LEN}~sizeof(\hyperlink{structglossy__data__struct}{glossy\_\-data\_\-struct})}
+\label{group__glossy-test-defines_gaf02e45f15080b8ec9dd7b286157617ff}
+
+\begin{DoxyCompactList}\small\item\em Length of data structure. \end{DoxyCompactList}\item 
+\hypertarget{group__glossy-test-defines_ga3d1e7d432a1b08c6c103a999b1dc76df}{
+\#define \hyperlink{group__glossy-test-defines_ga3d1e7d432a1b08c6c103a999b1dc76df}{IS\_\-INITIATOR}()~(node\_\-id == INITIATOR\_\-NODE\_\-ID)}
+\label{group__glossy-test-defines_ga3d1e7d432a1b08c6c103a999b1dc76df}
+
+\begin{DoxyCompactList}\small\item\em Check if the nodeId matches the one of the initiator. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__glossy-test-defines_ga56eff93cc86164ca823e6853c8dbf8a1}{GLOSSY\_\-IS\_\-BOOTSTRAPPING}()~(\hyperlink{group__glossy-test-variables-sched-sync_ga8f7aae7ff4364a1481312cef44f65f73}{skew\_\-estimated} $<$ GLOSSY\_\-BOOTSTRAP\_\-PERIODS)
+\begin{DoxyCompactList}\small\item\em Check if Glossy is still bootstrapping. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__glossy-test-defines_ga7d8d6a2abc29e1ea1ade49600faa5cfc}{GLOSSY\_\-IS\_\-SYNCED}()~(is\_\-t\_\-ref\_\-l\_\-updated())
+\begin{DoxyCompactList}\small\item\em Check if Glossy is synchronized. \end{DoxyCompactList}\item 
+\#define \hyperlink{group__glossy-test-defines_ga3eab42e5e2d60ea806b4c22447a9fb85}{GLOSSY\_\-REFERENCE\_\-TIME}~(get\_\-t\_\-ref\_\-l())
+\begin{DoxyCompactList}\small\item\em Get Glossy reference time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Define Documentation}
+\hypertarget{group__glossy-test-defines_ga56eff93cc86164ca823e6853c8dbf8a1}{
+\index{Application internal defines@{Application internal defines}!GLOSSY\_\-IS\_\-BOOTSTRAPPING@{GLOSSY\_\-IS\_\-BOOTSTRAPPING}}
+\index{GLOSSY\_\-IS\_\-BOOTSTRAPPING@{GLOSSY\_\-IS\_\-BOOTSTRAPPING}!Application internal defines@{Application internal defines}}
+\subsubsection[{GLOSSY\_\-IS\_\-BOOTSTRAPPING}]{\setlength{\rightskip}{0pt plus 5cm}\#define GLOSSY\_\-IS\_\-BOOTSTRAPPING(
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)~({\bf skew\_\-estimated} $<$ GLOSSY\_\-BOOTSTRAP\_\-PERIODS)}}
+\label{group__glossy-test-defines_ga56eff93cc86164ca823e6853c8dbf8a1}
+
+
+Check if Glossy is still bootstrapping. 
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__glossy-test-settings_ga8c2dcd42a2c913f0f80525a7c2eac3f1}{GLOSSY\_\-BOOTSTRAP\_\-PERIODS}. 
+\end{DoxySeeAlso}
+\hypertarget{group__glossy-test-defines_ga7d8d6a2abc29e1ea1ade49600faa5cfc}{
+\index{Application internal defines@{Application internal defines}!GLOSSY\_\-IS\_\-SYNCED@{GLOSSY\_\-IS\_\-SYNCED}}
+\index{GLOSSY\_\-IS\_\-SYNCED@{GLOSSY\_\-IS\_\-SYNCED}!Application internal defines@{Application internal defines}}
+\subsubsection[{GLOSSY\_\-IS\_\-SYNCED}]{\setlength{\rightskip}{0pt plus 5cm}\#define GLOSSY\_\-IS\_\-SYNCED(
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)~(is\_\-t\_\-ref\_\-l\_\-updated())}}
+\label{group__glossy-test-defines_ga7d8d6a2abc29e1ea1ade49600faa5cfc}
+
+
+Check if Glossy is synchronized. 
+
+The application assumes that a node is synchronized if it updated the reference time during the last Glossy phase. \begin{DoxySeeAlso}{See also}
+\hyperlink{group__glossy__sync_gae7e475746ec86ae6dd8ca9ece642faf8}{is\_\-t\_\-ref\_\-l\_\-updated} 
+\end{DoxySeeAlso}
+\hypertarget{group__glossy-test-defines_ga3eab42e5e2d60ea806b4c22447a9fb85}{
+\index{Application internal defines@{Application internal defines}!GLOSSY\_\-REFERENCE\_\-TIME@{GLOSSY\_\-REFERENCE\_\-TIME}}
+\index{GLOSSY\_\-REFERENCE\_\-TIME@{GLOSSY\_\-REFERENCE\_\-TIME}!Application internal defines@{Application internal defines}}
+\subsubsection[{GLOSSY\_\-REFERENCE\_\-TIME}]{\setlength{\rightskip}{0pt plus 5cm}\#define GLOSSY\_\-REFERENCE\_\-TIME~(get\_\-t\_\-ref\_\-l())}}
+\label{group__glossy-test-defines_ga3eab42e5e2d60ea806b4c22447a9fb85}
+
+
+Get Glossy reference time. 
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__glossy__sync_gaa37a5474c90f7747d0f5054dc1a03764}{get\_\-t\_\-ref\_\-l} 
+\end{DoxySeeAlso}

@@ -147,61 +147,64 @@ static unsigned long sum_latency = 0;      /**< \brief Current sum of latencies,
 PROCESS(glossy_print_stats_process, "Glossy print stats");
 PROCESS_THREAD(glossy_print_stats_process, ev, data)
 {
-	PROCESS_BEGIN();
+    PROCESS_BEGIN();
 
-	while(1) {
-		PROCESS_YIELD_UNTIL(ev == PROCESS_EVENT_POLL);
-		// Print statistics only if Glossy is not still bootstrapping.
-		if (!GLOSSY_IS_BOOTSTRAPPING()) {
-			if (get_rx_cnt()) {	// Packet received at least once.
-				// Increment number of successfully received packets.
-				packets_received++;
-				// Compute latency during last Glossy phase.
-				rtimer_clock_t lat = get_t_first_rx_l() - get_t_ref_l();
-				// Add last latency to sum of latencies.
-				sum_latency += lat;
-				// Convert latency to microseconds.
-				latency = (unsigned long)(lat) * 1e6 / RTIMER_SECOND;
-				// Print information about last packet and related latency.
-				printf("Glossy received %u time%s: seq_no %lu, latency %lu.%03lu ms\n",
-						get_rx_cnt(), (get_rx_cnt() > 1) ? "s" : "", glossy_data.seq_no,
-								latency / 1000, latency % 1000);
-			} else {	// Packet not received.
-				// Increment number of missed packets.
-				packets_missed++;
-				// Print failed reception.
-				printf("Glossy NOT received\n");
-			}
+    while(1) {
+        PROCESS_YIELD_UNTIL(ev == PROCESS_EVENT_POLL);
+        // Print statistics only if Glossy is not still bootstrapping.
+        if (!GLOSSY_IS_BOOTSTRAPPING()) {
+            if (get_rx_cnt()) { // Packet received at least once.
+                // Increment number of successfully received packets.
+                packets_received++;
+                // Compute latency during last Glossy phase.
+                rtimer_clock_t lat = get_t_first_rx_l() - get_t_ref_l();
+                // Add last latency to sum of latencies.
+                sum_latency += lat;
+                // Convert latency to microseconds.
+                latency = (unsigned long)(lat) * 1e6 / RTIMER_SECOND;
+                // Print information about last packet and related latency.
+                printf("Glossy received %u time%s: seq_no %lu, latency %lu.%03lu ms\n",
+                        get_rx_cnt(), (get_rx_cnt() > 1) ? "s" : "", glossy_data.seq_no,
+                                latency / 1000, latency % 1000);
+
+
+            } else {    // Packet not received.
+                // Increment number of missed packets.
+                packets_missed++;
+                // Print failed reception.
+                printf("Glossy NOT received\n");
+            }
 #if GLOSSY_DEBUG
-//			printf("skew %ld ppm\n", (long)(period_skew * 1e6) / GLOSSY_PERIOD);
-			printf("high_T_irq %u, rx_timeout %u, bad_length %u, bad_header %u, bad_crc %u\n",
-					high_T_irq, rx_timeout, bad_length, bad_header, bad_crc);
+            printf("skew %ld ppm\n", (long)(period_skew * 1e6) / GLOSSY_PERIOD);
+            printf("high_T_irq %u, rx_timeout %u, bad_length %u, bad_header %u, bad_crc %u\n",
+                    high_T_irq, rx_timeout, bad_length, bad_header, bad_crc);
 #endif /* GLOSSY_DEBUG */
-			// Compute current average reliability.
-			unsigned long avg_rel = packets_received * 1e5 / (packets_received + packets_missed);
-			// Print information about average reliability.
-			printf("average reliability %3lu.%03lu %% ",
-					avg_rel / 1000, avg_rel % 1000);
-			printf("(missed %lu out of %lu packets)\n",
-					packets_missed, packets_received + packets_missed);
+            // Compute current average reliability.
+            unsigned long avg_rel = packets_received * 1e5 / (packets_received + packets_missed);
+            // Print information about average reliability.
+            printf("average reliability %3lu.%03lu %% ",
+                    avg_rel / 1000, avg_rel % 1000);
+            printf("(missed %lu out of %lu packets)\n",
+                    packets_missed, packets_received + packets_missed);
 #if ENERGEST_CONF_ON
-			// Compute average radio-on time, in microseconds.
-			unsigned long avg_radio_on = (unsigned long)GLOSSY_PERIOD * 1e6 / RTIMER_SECOND *
-					(energest_type_time(ENERGEST_TYPE_LISTEN) + energest_type_time(ENERGEST_TYPE_TRANSMIT)) /
-					(energest_type_time(ENERGEST_TYPE_CPU) + energest_type_time(ENERGEST_TYPE_LPM));
-			// Print information about average radio-on time.
-			printf("average radio-on time %lu.%03lu ms\n",
-					avg_radio_on / 1000, avg_radio_on % 1000);
+            // Compute average radio-on time, in microseconds.
+            unsigned long avg_radio_on = (unsigned long)GLOSSY_PERIOD * 1e6 / RTIMER_SECOND *
+                    (energest_type_time(ENERGEST_TYPE_LISTEN) + energest_type_time(ENERGEST_TYPE_TRANSMIT)) /
+                    (energest_type_time(ENERGEST_TYPE_CPU) + energest_type_time(ENERGEST_TYPE_LPM));
+            // Print information about average radio-on time.
+            printf("average radio-on time %lu.%03lu ms\n",
+                    avg_radio_on / 1000, avg_radio_on % 1000);
 #endif /* ENERGEST_CONF_ON */
-			// Compute average latency, in microseconds.
-			unsigned long avg_latency = sum_latency * 1e6 / (RTIMER_SECOND * packets_received);
-			// Print information about average latency.
-			printf("average latency %lu.%03lu ms\n",
-					avg_latency / 1000, avg_latency % 1000);
-		}
-	}
+            // Compute average latency, in microseconds.
+            unsigned long avg_latency = sum_latency * 1e6 / (RTIMER_SECOND * packets_received);
+            // Print information about average latency.
+            printf("average latency %lu.%03lu ms\n",
+                    avg_latency / 1000, avg_latency % 1000);
+        }
 
-	PROCESS_END();
+    }
+
+    PROCESS_END();
 }
 
 /** @} */
@@ -212,32 +215,34 @@ PROCESS_THREAD(glossy_print_stats_process, ev, data)
  */
 
 static inline void estimate_period_skew(void) {
-	// Estimate clock skew over a period only if the reference time has been updated.
-	if (GLOSSY_IS_SYNCED()) {
-		// Estimate clock skew based on previous reference time and the Glossy period.
-		period_skew = get_t_ref_l() - (t_ref_l_old + (rtimer_clock_t)GLOSSY_PERIOD);
-		// Update old reference time with the newer one.
-		t_ref_l_old = get_t_ref_l();
-		// If Glossy is still bootstrapping, count the number of consecutive updates of the reference time.
-		if (GLOSSY_IS_BOOTSTRAPPING()) {
-			// Increment number of consecutive updates of the reference time.
-			skew_estimated++;
-			// Check if Glossy has exited from bootstrapping.
-			if (!GLOSSY_IS_BOOTSTRAPPING()) {
-				// Glossy has exited from bootstrapping.
-				leds_off(LEDS_RED);
-				// Initialize Energest values.
-				energest_init();
+    // Estimate clock skew over a period only if the reference time has been updated.
+    if (GLOSSY_IS_SYNCED()) {
+        // Estimate clock skew based on previous reference time and the Glossy period.
+        //if (glossy_data.seq_no > 50) {
+            period_skew = get_t_ref_l() - (t_ref_l_old + (rtimer_clock_t)GLOSSY_PERIOD);
+        //}
+        // Update old reference time with the newer one.
+        t_ref_l_old = get_t_ref_l();
+        // If Glossy is still bootstrapping, count the number of consecutive updates of the reference time.
+        if (GLOSSY_IS_BOOTSTRAPPING()) {
+            // Increment number of consecutive updates of the reference time.
+            skew_estimated++;
+            // Check if Glossy has exited from bootstrapping.
+            if (!GLOSSY_IS_BOOTSTRAPPING()) {
+                // Glossy has exited from bootstrapping.
+                leds_off(LEDS_RED);
+                // Initialize Energest values.
+                energest_init();
 #if GLOSSY_DEBUG
-				high_T_irq = 0;
-				bad_crc = 0;
-				bad_length = 0;
-				bad_header = 0;
+                high_T_irq = 0;
+                bad_crc = 0;
+                bad_length = 0;
+                bad_header = 0;
 #endif /* GLOSSY_DEBUG */
 
-			}
-		}
-	}
+            }
+        }
+    }
 }
 
 /** @} */
@@ -248,118 +253,118 @@ static inline void estimate_period_skew(void) {
  */
 
 char glossy_scheduler(struct rtimer *t, void *ptr) {
-	PT_BEGIN(&pt);
+    PT_BEGIN(&pt);
 
-	if (IS_INITIATOR()) {	// Glossy initiator.
-		while (1) {
-			// Increment sequence number.
-			glossy_data.seq_no++;
-			// Glossy phase.
-			leds_on(LEDS_GREEN);
-			rtimer_clock_t t_stop = RTIMER_TIME(t) + GLOSSY_DURATION;
-			// Start Glossy.
-			glossy_start((uint8_t *)&glossy_data, DATA_LEN, GLOSSY_INITIATOR, GLOSSY_SYNC, N_TX,
-					APPLICATION_HEADER, t_stop, (rtimer_callback_t)glossy_scheduler, t, ptr);
-			// Store time at which Glossy has started.
-			t_start = RTIMER_TIME(t);
-			// Yield the protothread. It will be resumed when Glossy terminates.
-			PT_YIELD(&pt);
+    if (IS_INITIATOR()) {   // Glossy initiator.
+        while (1) {
+            // Increment sequence number.
+            glossy_data.seq_no++;
+            // Glossy phase.
+            leds_on(LEDS_GREEN);
+            rtimer_clock_t t_stop = RTIMER_TIME(t) + GLOSSY_DURATION;
+            // Start Glossy.
+            glossy_start((uint8_t *)&glossy_data, DATA_LEN, GLOSSY_INITIATOR, GLOSSY_SYNC, N_TX,
+                    APPLICATION_HEADER, t_stop, (rtimer_callback_t)glossy_scheduler, t, ptr);
+            // Store time at which Glossy has started.
+            t_start = RTIMER_TIME(t);
+            // Yield the protothread. It will be resumed when Glossy terminates.
+            PT_YIELD(&pt);
 
-			// Off phase.
-			leds_off(LEDS_GREEN);
-			// Stop Glossy.
-			glossy_stop();
-			if (!GLOSSY_IS_BOOTSTRAPPING()) {
-				// Glossy has already successfully bootstrapped.
-				if (!GLOSSY_IS_SYNCED()) {
-					// The reference time was not updated: increment reference time by GLOSSY_PERIOD.
-					set_t_ref_l(GLOSSY_REFERENCE_TIME + GLOSSY_PERIOD);
-					set_t_ref_l_updated(1);
-				}
-			}
-			// Schedule begin of next Glossy phase based on GLOSSY_PERIOD.
-			rtimer_set(t, t_start + GLOSSY_PERIOD, 1, (rtimer_callback_t)glossy_scheduler, ptr);
-			// Estimate the clock skew over the last period.
-			estimate_period_skew();
-			// Poll the process that prints statistics (will be activated later by Contiki).
-			process_poll(&glossy_print_stats_process);
-			// Yield the protothread.
-			PT_YIELD(&pt);
-		}
-	} else {	// Glossy receiver.
-		while (1) {
-			// Glossy phase.
-			leds_on(LEDS_GREEN);
-			rtimer_clock_t t_stop;
-			if (GLOSSY_IS_BOOTSTRAPPING()) {
-				// Glossy is still bootstrapping:
-				// Schedule end of Glossy phase based on GLOSSY_INIT_DURATION.
-				t_stop = RTIMER_TIME(t) + GLOSSY_INIT_DURATION;
-			} else {
-				// Glossy has already successfully bootstrapped:
-				// Schedule end of Glossy phase based on GLOSSY_DURATION.
-				t_stop = RTIMER_TIME(t) + GLOSSY_DURATION;
-			}
-			// Start Glossy.
-			glossy_start((uint8_t *)&glossy_data, DATA_LEN, GLOSSY_RECEIVER, GLOSSY_SYNC, N_TX,
-					APPLICATION_HEADER, t_stop, (rtimer_callback_t)glossy_scheduler, t, ptr);
-			// Yield the protothread. It will be resumed when Glossy terminates.
-			PT_YIELD(&pt);
+            // Off phase.
+            leds_off(LEDS_GREEN);
+            // Stop Glossy.
+            glossy_stop();
+            if (!GLOSSY_IS_BOOTSTRAPPING()) {
+                // Glossy has already successfully bootstrapped.
+                if (!GLOSSY_IS_SYNCED()) {
+                    // The reference time was not updated: increment reference time by GLOSSY_PERIOD.
+                    set_t_ref_l(GLOSSY_REFERENCE_TIME + GLOSSY_PERIOD);
+                    set_t_ref_l_updated(1);
+                }
+            }
+            // Schedule begin of next Glossy phase based on GLOSSY_PERIOD.
+            rtimer_set(t, t_start + GLOSSY_PERIOD, 1, (rtimer_callback_t)glossy_scheduler, ptr);
+            // Estimate the clock skew over the last period.
+            estimate_period_skew();
+            // Poll the process that prints statistics (will be activated later by Contiki).
+            process_poll(&glossy_print_stats_process);
+            // Yield the protothread.
+            PT_YIELD(&pt);
+        }
+    } else {    // Glossy receiver.
+        while (1) {
+            // Glossy phase.
+            leds_on(LEDS_GREEN);
+            rtimer_clock_t t_stop;
+            if (GLOSSY_IS_BOOTSTRAPPING()) {
+                // Glossy is still bootstrapping:
+                // Schedule end of Glossy phase based on GLOSSY_INIT_DURATION.
+                t_stop = RTIMER_TIME(t) + GLOSSY_INIT_DURATION;
+            } else {
+                // Glossy has already successfully bootstrapped:
+                // Schedule end of Glossy phase based on GLOSSY_DURATION.
+                t_stop = RTIMER_TIME(t) + GLOSSY_DURATION;
+            }
+            // Start Glossy.
+            glossy_start((uint8_t *)&glossy_data, DATA_LEN, GLOSSY_RECEIVER, GLOSSY_SYNC, N_TX,
+                    APPLICATION_HEADER, t_stop, (rtimer_callback_t)glossy_scheduler, t, ptr);
+            // Yield the protothread. It will be resumed when Glossy terminates.
+            PT_YIELD(&pt);
 
-			// Off phase.
-			leds_off(LEDS_GREEN);
-			// Stop Glossy.
-			glossy_stop();
-			if (GLOSSY_IS_BOOTSTRAPPING()) {
-				// Glossy is still bootstrapping.
-				if (!GLOSSY_IS_SYNCED()) {
-					// The reference time was not updated: reset skew_estimated to zero.
-					skew_estimated = 0;
-				}
-			} else {
-				// Glossy has already successfully bootstrapped.
-				if (!GLOSSY_IS_SYNCED()) {
-					// The reference time was not updated:
-					// increment reference time by GLOSSY_PERIOD + period_skew.
-					set_t_ref_l(GLOSSY_REFERENCE_TIME + GLOSSY_PERIOD + period_skew);
-					set_t_ref_l_updated(1);
-					// Increment sync_missed.
-					sync_missed++;
-				} else {
-					// The reference time was not updated: reset sync_missed to zero.
-					sync_missed = 0;
-				}
-			}
-			// Estimate the clock skew over the last period.
-			estimate_period_skew();
-			if (GLOSSY_IS_BOOTSTRAPPING()) {
-				// Glossy is still bootstrapping.
-				if (skew_estimated == 0) {
-					// The reference time was not updated:
-					// Schedule begin of next Glossy phase based on last begin and GLOSSY_INIT_PERIOD.
-					rtimer_set(t, RTIMER_TIME(t) + GLOSSY_INIT_PERIOD, 1,
-							(rtimer_callback_t)glossy_scheduler, ptr);
-				} else {
-					// The reference time was updated:
-					// Schedule begin of next Glossy phase based on reference time and GLOSSY_INIT_PERIOD.
-					rtimer_set(t, GLOSSY_REFERENCE_TIME + GLOSSY_PERIOD - GLOSSY_INIT_GUARD_TIME, 1,
-							(rtimer_callback_t)glossy_scheduler, ptr);
-				}
-			} else {
-				// Glossy has already successfully bootstrapped:
-				// Schedule begin of next Glossy phase based on reference time and GLOSSY_PERIOD.
-				rtimer_set(t, GLOSSY_REFERENCE_TIME + GLOSSY_PERIOD +
-						period_skew - GLOSSY_GUARD_TIME * (1 + sync_missed), 1,
-						(rtimer_callback_t)glossy_scheduler, ptr);
-			}
-			// Poll the process that prints statistics (will be activated later by Contiki).
-			process_poll(&glossy_print_stats_process);
-			// Yield the protothread.
-			PT_YIELD(&pt);
-		}
-	}
+            // Off phase.
+            leds_off(LEDS_GREEN);
+            // Stop Glossy.
+            glossy_stop();
+            if (GLOSSY_IS_BOOTSTRAPPING()) {
+                // Glossy is still bootstrapping.
+                if (!GLOSSY_IS_SYNCED()) {
+                    // The reference time was not updated: reset skew_estimated to zero.
+                    skew_estimated = 0;
+                }
+            } else {
+                // Glossy has already successfully bootstrapped.
+                if (!GLOSSY_IS_SYNCED()) {
+                    // The reference time was not updated:
+                    // increment reference time by GLOSSY_PERIOD + period_skew.
+                    set_t_ref_l(GLOSSY_REFERENCE_TIME + GLOSSY_PERIOD + period_skew);
+                    set_t_ref_l_updated(1);
+                    // Increment sync_missed.
+                    sync_missed++;
+                } else {
+                    // The reference time was not updated: reset sync_missed to zero.
+                    sync_missed = 0;
+                }
+            }
+            // Estimate the clock skew over the last period.
+            estimate_period_skew();
+            if (GLOSSY_IS_BOOTSTRAPPING()) {
+                // Glossy is still bootstrapping.
+                if (skew_estimated == 0) {
+                    // The reference time was not updated:
+                    // Schedule begin of next Glossy phase based on last begin and GLOSSY_INIT_PERIOD.
+                    rtimer_set(t, RTIMER_TIME(t) + GLOSSY_INIT_PERIOD, 1,
+                            (rtimer_callback_t)glossy_scheduler, ptr);
+                } else {
+                    // The reference time was updated:
+                    // Schedule begin of next Glossy phase based on reference time and GLOSSY_INIT_PERIOD.
+                    rtimer_set(t, GLOSSY_REFERENCE_TIME + GLOSSY_PERIOD - GLOSSY_INIT_GUARD_TIME, 1,
+                            (rtimer_callback_t)glossy_scheduler, ptr);
+                }
+            } else {
+                // Glossy has already successfully bootstrapped:
+                // Schedule begin of next Glossy phase based on reference time and GLOSSY_PERIOD.
+                rtimer_set(t, GLOSSY_REFERENCE_TIME + GLOSSY_PERIOD +
+                        period_skew - GLOSSY_GUARD_TIME * (1 + sync_missed), 1,
+                        (rtimer_callback_t)glossy_scheduler, ptr);
+            }
+            // Poll the process that prints statistics (will be activated later by Contiki).
+            process_poll(&glossy_print_stats_process);
+            // Yield the protothread.
+            PT_YIELD(&pt);
+        }
+    }
 
-	PT_END(&pt);
+    PT_END(&pt);
 }
 
 /** @} */
@@ -373,19 +378,19 @@ PROCESS(glossy_test, "Glossy test");
 AUTOSTART_PROCESSES(&glossy_test);
 PROCESS_THREAD(glossy_test, ev, data)
 {
-	PROCESS_BEGIN();
+    PROCESS_BEGIN();
 
-	leds_on(LEDS_RED);
-	// Initialize Glossy data.
-	glossy_data.seq_no = 0;
-	// Start print stats processes.
-	process_start(&glossy_print_stats_process, NULL);
-	// Start Glossy busy-waiting process.
-	process_start(&glossy_process, NULL);
-	// Start Glossy experiment in one second.
-	rtimer_set(&rt, RTIMER_NOW() + RTIMER_SECOND, 1, (rtimer_callback_t)glossy_scheduler, NULL);
+    leds_on(LEDS_RED);
+    // Initialize Glossy data.
+    glossy_data.seq_no = 0;
+    // Start print stats processes.
+    process_start(&glossy_print_stats_process, NULL);
+    // Start Glossy busy-waiting process.
+    process_start(&glossy_process, NULL);
+    // Start Glossy experiment in one second.
+    rtimer_set(&rt, RTIMER_NOW() + RTIMER_SECOND, 1, (rtimer_callback_t)glossy_scheduler, NULL);
 
-	PROCESS_END();
+    PROCESS_END();
 }
 
 /** @} */

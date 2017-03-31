@@ -75,7 +75,7 @@ energest_type_time(int type)
   if(energest_current_mode[type]) {
     rtimer_clock_t now = RTIMER_NOW();
     energest_total_time[type].current += (rtimer_clock_t)
-      (now - energest_current_time[type]);
+      ((now - energest_current_time[type]) / ENERGEST_DIV);
     energest_current_time[type] = now;
   }
 #endif /* ENERGEST_CONF_LEVELDEVICE_LEVELS */
@@ -108,7 +108,7 @@ energest_flush(void)
     if(energest_current_mode[i]) {
       now = RTIMER_NOW();
       energest_total_time[i].current += (rtimer_clock_t)
-	(now - energest_current_time[i]);
+	((now - energest_current_time[i]) / ENERGEST_DIV);
       energest_current_time[i] = now;
     }
   }

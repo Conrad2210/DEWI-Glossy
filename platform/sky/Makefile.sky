@@ -1,8 +1,8 @@
 # $Id: Makefile.sky,v 1.17 2008/07/02 08:47:05 adamdunkels Exp $
 
 
-ARCH=glossy.c msp430.c leds.c watchdog.c spi.c \
-     xmem.c cc2420.c node-id.c uart1.c
+ARCH=glossy-arch.c msp430.c leds.c watchdog.c spi.c \
+     xmem.c cc2420.c node-id.c uart1.c ds2411.c
 
 CONTIKI_TARGET_DIRS = . dev apps net
 ifndef CONTIKI_TARGET_MAIN

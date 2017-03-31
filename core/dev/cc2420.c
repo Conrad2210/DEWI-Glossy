@@ -59,7 +59,7 @@ static inline uint8_t radio_status(void) {
 	return status;
 }
 static inline void radio_flush_rx(void) {
-	uint8_t dummy;
+	uint8_t dummy  __attribute__((unused));
 	FASTSPI_READ_FIFO_BYTE(dummy);
 	FASTSPI_STROBE(CC2420_SFLUSHRX);
 	FASTSPI_STROBE(CC2420_SFLUSHRX);
@@ -136,4 +136,11 @@ cc2420_set_channel(int c)
   while(radio_status() & BV(CC2420_TX_ACTIVE));
 
   FASTSPI_SETREG(CC2420_FSCTRL, f);
+}
+
+void cc2420_set_tx_power(int power) {
+	uint16_t reg;
+	FASTSPI_GETREG(CC2420_TXCTRL, reg);
+	reg = (reg & 0xffe0) | (power & 0x1f);
+	FASTSPI_SETREG(CC2420_TXCTRL, reg);
 }

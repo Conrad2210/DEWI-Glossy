@@ -43,7 +43,7 @@ CFLAGSWERROR=-Werror
 endif
 CFLAGSNO = -Wall -mmcu=$(MCU) -g $(CFLAGSWERROR)
 CFLAGS  += $(CFLAGSNO) -Os
-LDFLAGS += -mmcu=$(MCU) -Wl,-Map=contiki-$(TARGET).map -Wl,--section-start -Wl,.glossy=0x4000 -Wl,--section-start -Wl,.text=0x4400
+LDFLAGS += -mmcu=$(MCU) -Wl,-Map=contiki-$(TARGET).map
 
 PROJECT_OBJECTFILES += ${addprefix $(OBJECTDIR)/,$(CONTIKI_TARGET_MAIN:.c=.o)}
 

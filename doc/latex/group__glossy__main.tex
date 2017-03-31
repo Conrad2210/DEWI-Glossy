@@ -1,0 +1,122 @@
+\hypertarget{group__glossy__main}{
+\section{Interface related to flooding}
+\label{group__glossy__main}\index{Interface related to flooding@{Interface related to flooding}}
+}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{group__glossy__main_ga3b8821abe2625c08305cba82200bf67b}{glossy\_\-start} (uint8\_\-t $\ast$data\_\-, uint8\_\-t data\_\-len\_\-, uint8\_\-t initiator\_\-, uint8\_\-t sync\_\-, uint8\_\-t tx\_\-max\_\-)
+\begin{DoxyCompactList}\small\item\em Start Glossy and stall all other application tasks. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__main_ga708d908317af37345a810942271bda8c}{glossy\_\-stop} (void)
+\begin{DoxyCompactList}\small\item\em Stop Glossy and resume all other application tasks. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__main_gab2e2126a4762a97c6396ce51221eaea7}{get\_\-rx\_\-cnt} (void)
+\begin{DoxyCompactList}\small\item\em Get the last received counter. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__main_ga16ddcf3313115b5697723299590ca8f5}{get\_\-state} (void)
+\begin{DoxyCompactList}\small\item\em Get the current Glossy state. \end{DoxyCompactList}\item 
+rtimer\_\-clock\_\-t \hyperlink{group__glossy__main_ga88daf788efaacdc2705c58a822d97129}{get\_\-t\_\-first\_\-rx\_\-l} (void)
+\begin{DoxyCompactList}\small\item\em Get low-\/frequency time of first packet reception during the last Glossy phase. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{group__glossy__main_gab2e2126a4762a97c6396ce51221eaea7}{
+\index{Interface related to flooding@{Interface related to flooding}!get\_\-rx\_\-cnt@{get\_\-rx\_\-cnt}}
+\index{get\_\-rx\_\-cnt@{get\_\-rx\_\-cnt}!Interface related to flooding@{Interface related to flooding}}
+\subsubsection[{get\_\-rx\_\-cnt}]{\setlength{\rightskip}{0pt plus 5cm}uint8\_\-t get\_\-rx\_\-cnt (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}
+\label{group__glossy__main_gab2e2126a4762a97c6396ce51221eaea7}
+
+
+Get the last received counter. 
+
+\begin{DoxyReturn}{Returns}
+Number of times the packet has been received during last Glossy phase. If it is zero, the packet was not successfully received. 
+\end{DoxyReturn}
+\hypertarget{group__glossy__main_ga16ddcf3313115b5697723299590ca8f5}{
+\index{Interface related to flooding@{Interface related to flooding}!get\_\-state@{get\_\-state}}
+\index{get\_\-state@{get\_\-state}!Interface related to flooding@{Interface related to flooding}}
+\subsubsection[{get\_\-state}]{\setlength{\rightskip}{0pt plus 5cm}uint8\_\-t get\_\-state (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}
+\label{group__glossy__main_ga16ddcf3313115b5697723299590ca8f5}
+
+
+Get the current Glossy state. 
+
+\begin{DoxyReturn}{Returns}
+Current Glossy state, one of the possible values of \hyperlink{glossy_8h_ac2573e60f03b983302456e2f6dc36c8e}{glossy\_\-state}. 
+\end{DoxyReturn}
+\hypertarget{group__glossy__main_ga88daf788efaacdc2705c58a822d97129}{
+\index{Interface related to flooding@{Interface related to flooding}!get\_\-t\_\-first\_\-rx\_\-l@{get\_\-t\_\-first\_\-rx\_\-l}}
+\index{get\_\-t\_\-first\_\-rx\_\-l@{get\_\-t\_\-first\_\-rx\_\-l}!Interface related to flooding@{Interface related to flooding}}
+\subsubsection[{get\_\-t\_\-first\_\-rx\_\-l}]{\setlength{\rightskip}{0pt plus 5cm}rtimer\_\-clock\_\-t get\_\-t\_\-first\_\-rx\_\-l (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}
+\label{group__glossy__main_ga88daf788efaacdc2705c58a822d97129}
+
+
+Get low-\/frequency time of first packet reception during the last Glossy phase. 
+
+\begin{DoxyReturn}{Returns}
+Low-\/frequency time of first packet reception during the last Glossy phase. 
+\end{DoxyReturn}
+\hypertarget{group__glossy__main_ga3b8821abe2625c08305cba82200bf67b}{
+\index{Interface related to flooding@{Interface related to flooding}!glossy\_\-start@{glossy\_\-start}}
+\index{glossy\_\-start@{glossy\_\-start}!Interface related to flooding@{Interface related to flooding}}
+\subsubsection[{glossy\_\-start}]{\setlength{\rightskip}{0pt plus 5cm}void glossy\_\-start (
+\begin{DoxyParamCaption}
+\item[{uint8\_\-t $\ast$}]{data\_\-, }
+\item[{uint8\_\-t}]{data\_\-len\_\-, }
+\item[{uint8\_\-t}]{initiator\_\-, }
+\item[{uint8\_\-t}]{sync\_\-, }
+\item[{uint8\_\-t}]{tx\_\-max\_\-}
+\end{DoxyParamCaption}
+)}}
+\label{group__glossy__main_ga3b8821abe2625c08305cba82200bf67b}
+
+
+Start Glossy and stall all other application tasks. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\_\-} & A pointer to the flooding data.\\
+\hline
+\end{DoxyParams}
+At the initiator, Glossy reads from the given memory location data provided by the application.
+
+At a receiver, Glossy writes to the given memory location data for the application. 
+\begin{DoxyParams}{Parameters}
+{\em data\_\-len\_\-} & Length of the flooding data, in bytes. \\
+\hline
+{\em initiator\_\-} & Not zero if the node is the initiator, zero if it is a receiver. \\
+\hline
+{\em sync\_\-} & Not zero if Glossy must provide time synchronization, zero otherwise. \\
+\hline
+{\em tx\_\-max\_\-} & Maximum number of transmissions (N). \\
+\hline
+\end{DoxyParams}
+\hypertarget{group__glossy__main_ga708d908317af37345a810942271bda8c}{
+\index{Interface related to flooding@{Interface related to flooding}!glossy\_\-stop@{glossy\_\-stop}}
+\index{glossy\_\-stop@{glossy\_\-stop}!Interface related to flooding@{Interface related to flooding}}
+\subsubsection[{glossy\_\-stop}]{\setlength{\rightskip}{0pt plus 5cm}uint8\_\-t glossy\_\-stop (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}
+\label{group__glossy__main_ga708d908317af37345a810942271bda8c}
+
+
+Stop Glossy and resume all other application tasks. 
+
+\begin{DoxyReturn}{Returns}
+Number of times the packet has been received during last Glossy phase. If it is zero, the packet was not successfully received. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__glossy__main_gab2e2126a4762a97c6396ce51221eaea7}{get\_\-rx\_\-cnt} 
+\end{DoxySeeAlso}

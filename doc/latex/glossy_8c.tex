@@ -1,0 +1,334 @@
+\hypertarget{glossy_8c}{
+\section{core/dev/glossy.c File Reference}
+\label{glossy_8c}\index{core/dev/glossy.c@{core/dev/glossy.c}}
+}
+{\ttfamily \#include \char`\"{}glossy.h\char`\"{}}\par
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{glossy_8c_a799719d153ea370a09f852bf65d57b03}{
+static void {\bfseries radio\_\-flush\_\-tx} (void)}
+\label{glossy_8c_a799719d153ea370a09f852bf65d57b03}
+
+\item 
+\hypertarget{glossy_8c_a048ef2243b4b68f944bbc234a3a6d295}{
+static uint8\_\-t {\bfseries radio\_\-status} (void)}
+\label{glossy_8c_a048ef2243b4b68f944bbc234a3a6d295}
+
+\item 
+\hypertarget{glossy_8c_ad24644db2a5e346d32f78d914e94e22b}{
+static void {\bfseries radio\_\-on} (void)}
+\label{glossy_8c_ad24644db2a5e346d32f78d914e94e22b}
+
+\item 
+\hypertarget{glossy_8c_a031d5736a3299978d1ce8a218fa75362}{
+static void {\bfseries radio\_\-off} (void)}
+\label{glossy_8c_a031d5736a3299978d1ce8a218fa75362}
+
+\item 
+\hypertarget{glossy_8c_acdcc048b4ae33dd0bc034388d1286bde}{
+static void {\bfseries radio\_\-flush\_\-rx} (void)}
+\label{glossy_8c_acdcc048b4ae33dd0bc034388d1286bde}
+
+\item 
+\hypertarget{glossy_8c_a82db95177e93dc8e7655e6ff02ad11bd}{
+static void {\bfseries radio\_\-abort\_\-rx} (void)}
+\label{glossy_8c_a82db95177e93dc8e7655e6ff02ad11bd}
+
+\item 
+\hypertarget{glossy_8c_a547a383fd46693b7efb0e9717a3b9d72}{
+static void {\bfseries radio\_\-abort\_\-tx} (void)}
+\label{glossy_8c_a547a383fd46693b7efb0e9717a3b9d72}
+
+\item 
+\hypertarget{glossy_8c_af4348ca23159f50441c2ace7dc03b732}{
+static void {\bfseries radio\_\-start\_\-tx} (void)}
+\label{glossy_8c_af4348ca23159f50441c2ace7dc03b732}
+
+\item 
+\hypertarget{glossy_8c_a179926a20c1b0a163bea572e3da4104d}{
+static void {\bfseries radio\_\-write\_\-tx} (void)}
+\label{glossy_8c_a179926a20c1b0a163bea572e3da4104d}
+
+\item 
+\hypertarget{glossy_8c_a8b9f88d283bd50c8a1f5e60b73729a62}{
+{\bfseries interrupt} (TIMERB1\_\-VECTOR)}
+\label{glossy_8c_a8b9f88d283bd50c8a1f5e60b73729a62}
+
+\item 
+\hypertarget{glossy_8c_a8dbc4865d07da3f29ff9a4a15996e02f}{
+{\bfseries PROCESS} (glossy\_\-process,\char`\"{}Glossy busy-\/waiting process\char`\"{})}
+\label{glossy_8c_a8dbc4865d07da3f29ff9a4a15996e02f}
+
+\item 
+\hypertarget{glossy_8c_aa92b8e801938928f6d41630fc7370899}{
+{\bfseries PROCESS\_\-THREAD} (glossy\_\-process, ev, data)}
+\label{glossy_8c_aa92b8e801938928f6d41630fc7370899}
+
+\item 
+\hypertarget{glossy_8c_a38aa7d55669b1e73466a4ea01dc996d3}{
+static void {\bfseries glossy\_\-disable\_\-other\_\-interrupts} (void)}
+\label{glossy_8c_a38aa7d55669b1e73466a4ea01dc996d3}
+
+\item 
+\hypertarget{glossy_8c_ab0bd596df2686ad049609901fb6fe317}{
+static void {\bfseries glossy\_\-enable\_\-other\_\-interrupts} (void)}
+\label{glossy_8c_ab0bd596df2686ad049609901fb6fe317}
+
+\item 
+void \hyperlink{group__glossy__main_ga3b8821abe2625c08305cba82200bf67b}{glossy\_\-start} (uint8\_\-t $\ast$data\_\-, uint8\_\-t data\_\-len\_\-, uint8\_\-t initiator\_\-, uint8\_\-t sync\_\-, uint8\_\-t tx\_\-max\_\-)
+\begin{DoxyCompactList}\small\item\em Start Glossy and stall all other application tasks. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__main_ga708d908317af37345a810942271bda8c}{glossy\_\-stop} (void)
+\begin{DoxyCompactList}\small\item\em Stop Glossy and resume all other application tasks. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__main_gab2e2126a4762a97c6396ce51221eaea7}{get\_\-rx\_\-cnt} (void)
+\begin{DoxyCompactList}\small\item\em Get the last received counter. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__sync_ga2cb03b56f27f6f7f0b4ebf0ec6ba8333}{get\_\-relay\_\-cnt} (void)
+\begin{DoxyCompactList}\small\item\em Get the last relay counter. \end{DoxyCompactList}\item 
+rtimer\_\-clock\_\-t \hyperlink{group__glossy__sync_ga00e1a87bdb504b0819a7b5d6c637eaa8}{get\_\-T\_\-slot\_\-h} (void)
+\begin{DoxyCompactList}\small\item\em Get the local estimation of T\_\-slot, in DCO clock ticks. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__sync_gae7e475746ec86ae6dd8ca9ece642faf8}{is\_\-t\_\-ref\_\-l\_\-updated} (void)
+\begin{DoxyCompactList}\small\item\em Provide information about current synchronization status. \end{DoxyCompactList}\item 
+rtimer\_\-clock\_\-t \hyperlink{group__glossy__main_ga88daf788efaacdc2705c58a822d97129}{get\_\-t\_\-first\_\-rx\_\-l} (void)
+\begin{DoxyCompactList}\small\item\em Get low-\/frequency time of first packet reception during the last Glossy phase. \end{DoxyCompactList}\item 
+rtimer\_\-clock\_\-t \hyperlink{group__glossy__sync_gaa37a5474c90f7747d0f5054dc1a03764}{get\_\-t\_\-ref\_\-l} (void)
+\begin{DoxyCompactList}\small\item\em Get low-\/frequency synchronization reference time. \end{DoxyCompactList}\item 
+void \hyperlink{group__glossy__sync_gac14ac43f69412b67d2d326b32c2d9014}{set\_\-t\_\-ref\_\-l} (rtimer\_\-clock\_\-t t)
+\begin{DoxyCompactList}\small\item\em Set low-\/frequency synchronization reference time. \end{DoxyCompactList}\item 
+void \hyperlink{group__glossy__sync_ga189faa7cc7395e8895e1ddcbd645f14e}{set\_\-t\_\-ref\_\-l\_\-updated} (uint8\_\-t updated)
+\begin{DoxyCompactList}\small\item\em Set the current synchronization status. \end{DoxyCompactList}\item 
+uint8\_\-t \hyperlink{group__glossy__main_ga16ddcf3313115b5697723299590ca8f5}{get\_\-state} (void)
+\begin{DoxyCompactList}\small\item\em Get the current Glossy state. \end{DoxyCompactList}\item 
+\hypertarget{glossy_8c_a0dc5f5ed457b94bd006b0db293676e3d}{
+static void {\bfseries estimate\_\-slot\_\-length} (rtimer\_\-clock\_\-t t\_\-rx\_\-stop\_\-tmp)}
+\label{glossy_8c_a0dc5f5ed457b94bd006b0db293676e3d}
+
+\item 
+\hypertarget{glossy_8c_a2798966db6638d3c197d88d85831d01b}{
+static void {\bfseries compute\_\-sync\_\-reference\_\-time} (void)}
+\label{glossy_8c_a2798966db6638d3c197d88d85831d01b}
+
+\item 
+\hypertarget{group__glossy__interrupts_ga82802b6993a2232c7d3bfa5f990847d5}{
+void {\bfseries glossy\_\-begin\_\-rx} (void)}
+\label{group__glossy__interrupts_ga82802b6993a2232c7d3bfa5f990847d5}
+
+\item 
+\hypertarget{group__glossy__interrupts_ga9eb72a239fb27960c4e3422e08967632}{
+void {\bfseries glossy\_\-end\_\-rx} (void)}
+\label{group__glossy__interrupts_ga9eb72a239fb27960c4e3422e08967632}
+
+\item 
+\hypertarget{group__glossy__interrupts_gaf7bf518d79b5d9abe3d5f32765c9764d}{
+void {\bfseries glossy\_\-begin\_\-tx} (void)}
+\label{group__glossy__interrupts_gaf7bf518d79b5d9abe3d5f32765c9764d}
+
+\item 
+\hypertarget{group__glossy__interrupts_ga0f1f14610a1d1c52083d373f0179afad}{
+void {\bfseries glossy\_\-end\_\-tx} (void)}
+\label{group__glossy__interrupts_ga0f1f14610a1d1c52083d373f0179afad}
+
+\item 
+\hypertarget{group__glossy__timeouts_gaf65d041af0217771bc6177a829c0e490}{
+void {\bfseries glossy\_\-schedule\_\-rx\_\-timeout} (void)}
+\label{group__glossy__timeouts_gaf65d041af0217771bc6177a829c0e490}
+
+\item 
+\hypertarget{group__glossy__timeouts_ga8bfbcadfe82f03bd255d4769d60b1257}{
+void {\bfseries glossy\_\-stop\_\-rx\_\-timeout} (void)}
+\label{group__glossy__timeouts_ga8bfbcadfe82f03bd255d4769d60b1257}
+
+\item 
+\hypertarget{group__glossy__timeouts_ga644979b6e29ab398f19bde3502e31fa2}{
+void {\bfseries glossy\_\-schedule\_\-initiator\_\-timeout} (void)}
+\label{group__glossy__timeouts_ga644979b6e29ab398f19bde3502e31fa2}
+
+\item 
+\hypertarget{group__glossy__timeouts_gab9b5f738a3d4732bdf8c2fb271200f91}{
+void {\bfseries glossy\_\-stop\_\-initiator\_\-timeout} (void)}
+\label{group__glossy__timeouts_gab9b5f738a3d4732bdf8c2fb271200f91}
+
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{glossy_8c_aefe15c4e23ba6ca2a5528c2d3ea73d12}{
+static uint8\_\-t {\bfseries initiator}}
+\label{glossy_8c_aefe15c4e23ba6ca2a5528c2d3ea73d12}
+
+\item 
+\hypertarget{glossy_8c_adb4b09387463cd61bf8f7217366310ef}{
+static uint8\_\-t {\bfseries sync}}
+\label{glossy_8c_adb4b09387463cd61bf8f7217366310ef}
+
+\item 
+\hypertarget{glossy_8c_ac4d763b359e41d4f238eb40d68b46ed1}{
+static uint8\_\-t {\bfseries rx\_\-cnt}}
+\label{glossy_8c_ac4d763b359e41d4f238eb40d68b46ed1}
+
+\item 
+\hypertarget{glossy_8c_a401dd022349f23172a53f7487b528b13}{
+static uint8\_\-t {\bfseries tx\_\-cnt}}
+\label{glossy_8c_a401dd022349f23172a53f7487b528b13}
+
+\item 
+\hypertarget{glossy_8c_ac3e138de046d08760d4df4b3bd49c0f4}{
+static uint8\_\-t {\bfseries tx\_\-max}}
+\label{glossy_8c_ac3e138de046d08760d4df4b3bd49c0f4}
+
+\item 
+\hypertarget{glossy_8c_abe222f6d3581e7920dcad5306cc906a8}{
+static uint8\_\-t $\ast$ {\bfseries data}}
+\label{glossy_8c_abe222f6d3581e7920dcad5306cc906a8}
+
+\item 
+\hypertarget{glossy_8c_af77c2f11739dc8fca077753cc3a6e5fb}{
+static uint8\_\-t $\ast$ {\bfseries packet}}
+\label{glossy_8c_af77c2f11739dc8fca077753cc3a6e5fb}
+
+\item 
+\hypertarget{glossy_8c_ac78cff7af99787faad2a285dffdde08e}{
+static uint8\_\-t {\bfseries data\_\-len}}
+\label{glossy_8c_ac78cff7af99787faad2a285dffdde08e}
+
+\item 
+\hypertarget{glossy_8c_a0a0e506cb489b6e86a9d84f8a4ab1d29}{
+static uint8\_\-t {\bfseries packet\_\-len}}
+\label{glossy_8c_a0a0e506cb489b6e86a9d84f8a4ab1d29}
+
+\item 
+\hypertarget{glossy_8c_a364610880fb31514073b63e388bf1011}{
+static uint8\_\-t {\bfseries bytes\_\-read}}
+\label{glossy_8c_a364610880fb31514073b63e388bf1011}
+
+\item 
+\hypertarget{glossy_8c_a945c48499f088716d04325a3f537061e}{
+static uint8\_\-t {\bfseries tx\_\-relay\_\-cnt\_\-last}}
+\label{glossy_8c_a945c48499f088716d04325a3f537061e}
+
+\item 
+\hypertarget{glossy_8c_a06fcd46097cb1779eaa383a6419cd27d}{
+static volatile uint8\_\-t {\bfseries state}}
+\label{glossy_8c_a06fcd46097cb1779eaa383a6419cd27d}
+
+\item 
+\hypertarget{glossy_8c_afd6a087120c9788c8914f87ae9e8ad43}{
+static rtimer\_\-clock\_\-t {\bfseries t\_\-rx\_\-start}}
+\label{glossy_8c_afd6a087120c9788c8914f87ae9e8ad43}
+
+\item 
+\hypertarget{glossy_8c_a1d1f65a01fb50d4893c83cdcc0a3eb09}{
+static rtimer\_\-clock\_\-t {\bfseries t\_\-rx\_\-stop}}
+\label{glossy_8c_a1d1f65a01fb50d4893c83cdcc0a3eb09}
+
+\item 
+\hypertarget{glossy_8c_ab179cf82c7e69bb3dd34f8050b1c3b21}{
+static rtimer\_\-clock\_\-t {\bfseries t\_\-tx\_\-start}}
+\label{glossy_8c_ab179cf82c7e69bb3dd34f8050b1c3b21}
+
+\item 
+\hypertarget{glossy_8c_a69edf11bc775e88d47ed8948d1611caa}{
+static rtimer\_\-clock\_\-t {\bfseries t\_\-tx\_\-stop}}
+\label{glossy_8c_a69edf11bc775e88d47ed8948d1611caa}
+
+\item 
+\hypertarget{glossy_8c_a3753f6b371f23d19d4e6fd510a839e51}{
+static rtimer\_\-clock\_\-t {\bfseries t\_\-rx\_\-timeout}}
+\label{glossy_8c_a3753f6b371f23d19d4e6fd510a839e51}
+
+\item 
+\hypertarget{glossy_8c_a1a95f38fc8a0b293c0a37397f1feba79}{
+static rtimer\_\-clock\_\-t {\bfseries T\_\-irq}}
+\label{glossy_8c_a1a95f38fc8a0b293c0a37397f1feba79}
+
+\item 
+\hypertarget{glossy_8c_a3b2b34681a904fc47367cd8e58400159}{
+static unsigned short {\bfseries ie1}}
+\label{glossy_8c_a3b2b34681a904fc47367cd8e58400159}
+
+\item 
+\hypertarget{glossy_8c_a0f3be6e09127b6f9c06cea8b49e31e93}{
+static unsigned short {\bfseries ie2}}
+\label{glossy_8c_a0f3be6e09127b6f9c06cea8b49e31e93}
+
+\item 
+\hypertarget{glossy_8c_a8271a17297c5b8ea68c520829cc55078}{
+static unsigned short {\bfseries p1ie}}
+\label{glossy_8c_a8271a17297c5b8ea68c520829cc55078}
+
+\item 
+\hypertarget{glossy_8c_ab96a5e0b03b03fba078383cab97682a0}{
+static unsigned short {\bfseries p2ie}}
+\label{glossy_8c_ab96a5e0b03b03fba078383cab97682a0}
+
+\item 
+\hypertarget{glossy_8c_aba5925f9972c250ece0af5f6fc9bb95b}{
+static unsigned short {\bfseries tbiv}}
+\label{glossy_8c_aba5925f9972c250ece0af5f6fc9bb95b}
+
+\item 
+\hypertarget{glossy_8c_a706fef201fa1562f9975aaf02ce9c3aa}{
+static rtimer\_\-clock\_\-t {\bfseries T\_\-slot\_\-h}}
+\label{glossy_8c_a706fef201fa1562f9975aaf02ce9c3aa}
+
+\item 
+\hypertarget{glossy_8c_acc2907142e8bec45fb49e258dd752a6d}{
+static rtimer\_\-clock\_\-t {\bfseries T\_\-rx\_\-h}}
+\label{glossy_8c_acc2907142e8bec45fb49e258dd752a6d}
+
+\item 
+\hypertarget{glossy_8c_a2b4a2f48a2e7e0c5c4d3b463bec10d30}{
+static rtimer\_\-clock\_\-t {\bfseries T\_\-w\_\-rt\_\-h}}
+\label{glossy_8c_a2b4a2f48a2e7e0c5c4d3b463bec10d30}
+
+\item 
+\hypertarget{glossy_8c_a3ec4fb55aa48c7355cc25644d394a0f9}{
+static rtimer\_\-clock\_\-t {\bfseries T\_\-tx\_\-h}}
+\label{glossy_8c_a3ec4fb55aa48c7355cc25644d394a0f9}
+
+\item 
+\hypertarget{glossy_8c_afeeedcaabd6011af64e89f14469cad56}{
+static rtimer\_\-clock\_\-t {\bfseries T\_\-w\_\-tr\_\-h}}
+\label{glossy_8c_afeeedcaabd6011af64e89f14469cad56}
+
+\item 
+\hypertarget{glossy_8c_af05f9ab12d97fa6596b15ca1ece1348d}{
+static rtimer\_\-clock\_\-t {\bfseries t\_\-ref\_\-l}}
+\label{glossy_8c_af05f9ab12d97fa6596b15ca1ece1348d}
+
+\item 
+\hypertarget{glossy_8c_aac6090e89957db5d820a8092704e53bc}{
+static rtimer\_\-clock\_\-t {\bfseries T\_\-offset\_\-h}}
+\label{glossy_8c_aac6090e89957db5d820a8092704e53bc}
+
+\item 
+\hypertarget{glossy_8c_a538ec315e4eab1c3f14be8b60e019c46}{
+static rtimer\_\-clock\_\-t {\bfseries t\_\-first\_\-rx\_\-l}}
+\label{glossy_8c_a538ec315e4eab1c3f14be8b60e019c46}
+
+\item 
+\hypertarget{glossy_8c_a11f84c009f790608cc450219f29b061d}{
+static unsigned long {\bfseries T\_\-slot\_\-h\_\-sum}}
+\label{glossy_8c_a11f84c009f790608cc450219f29b061d}
+
+\item 
+\hypertarget{glossy_8c_af363164a0e90c37666acf4ff8bb59cdc}{
+static uint8\_\-t {\bfseries win\_\-cnt}}
+\label{glossy_8c_af363164a0e90c37666acf4ff8bb59cdc}
+
+\item 
+\hypertarget{glossy_8c_a6221f6135bd3553029899cdff832891a}{
+static uint8\_\-t {\bfseries relay\_\-cnt}}
+\label{glossy_8c_a6221f6135bd3553029899cdff832891a}
+
+\item 
+\hypertarget{glossy_8c_ae6a4f200588a1b376a27f68d079241ac}{
+static uint8\_\-t {\bfseries t\_\-ref\_\-l\_\-updated}}
+\label{glossy_8c_ae6a4f200588a1b376a27f68d079241ac}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Glossy core, source file. \begin{DoxyAuthor}{Author}
+Federico Ferrari $<$\href{mailto:ferrari@tik.ee.ethz.ch}{\tt ferrari@tik.ee.ethz.ch}$>$
+\end{DoxyAuthor}

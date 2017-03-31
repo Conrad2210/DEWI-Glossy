@@ -40,6 +40,8 @@
 #include "dev/uart1.h"
 #include "dev/watchdog.h"
 #include "dev/xmem.h"
+#include "dev/ds2411.h"
+#include "lib/random.h"
 
 #include "node-id.h"
 #include "sys/autostart.h"
@@ -80,6 +82,12 @@ main(int argc, char **argv)
 
   leds_on(LEDS_GREEN);
 
+  ds2411_init();
+  /* XXX hack: Fix it so that the 802.15.4 MAC address is compatible
+     with an Ethernet MAC address - byte 0 (byte 2 in the DS ID)
+     cannot be odd. */
+  ds2411_id[2] &= 0xfe;
+
   leds_on(LEDS_BLUE);
   xmem_init();
 
@@ -95,6 +103,8 @@ main(int argc, char **argv)
   /* Restore node id if such has been stored in external mem */
   node_id_restore();
 #endif
+
+  random_init(node_id * RTIMER_NOW());
 
   leds_off(LEDS_BLUE);
   /*

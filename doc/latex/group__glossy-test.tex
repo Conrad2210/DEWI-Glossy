@@ -1,0 +1,42 @@
+\hypertarget{group__glossy-test}{
+\section{Simple application for testing Glossy}
+\label{group__glossy-test}\index{Simple application for testing Glossy@{Simple application for testing Glossy}}
+}
+\subsection*{Modules}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__glossy-test-variables}{Application variables}
+\item 
+\hyperlink{group__glossy-test-processes}{Application processes and functions}
+\item 
+\hyperlink{group__glossy-test-settings}{Application settings}
+\item 
+\hyperlink{group__glossy-test-defines}{Application internal defines}
+\end{DoxyCompactItemize}
+\subsection*{Files}
+\begin{DoxyCompactItemize}
+\item 
+file \hyperlink{glossy-test_8c}{glossy-\/test.c}
+\item 
+file \hyperlink{glossy-test_8h}{glossy-\/test.h}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This application runs Glossy periodically to flood a packet from one node (initiator) to the other nodes (receivers) and prints flooding-\/related statistics.
+
+The application schedules Glossy periodically with a fixed period \hyperlink{group__glossy-test-settings_ga6f68058577fdbfccbd8e50537609a5e4}{GLOSSY\_\-PERIOD}.
+
+The duration of each Glossy phase is given by \hyperlink{group__glossy-test-settings_ga26e366aad612a866fe38ef7bd7629858}{GLOSSY\_\-DURATION}.
+
+During each Glossy phase, the maximum number of transmissions in Glossy (N) is set to \hyperlink{group__glossy-test-settings_ga50f8fba62aef680d9929caefea7ca7e4}{N\_\-TX}.
+
+The initiator of the floods is the node having nodeId \hyperlink{group__glossy-test-settings_ga2e373237aef3ee2b0fdb15cd0b8c5390}{INITIATOR\_\-NODE\_\-ID}.
+
+The packet to be flooded has the format specified by data structure \hyperlink{structglossy__data__struct}{glossy\_\-data\_\-struct}.
+
+Receivers synchronize by computing the reference time during each Glossy phase.
+
+To synchronize fast, at startup receivers run Glossy with a significantly shorter period (\hyperlink{group__glossy-test-settings_ga21f18e3204161cd2b12f9979a28376f2}{GLOSSY\_\-INIT\_\-PERIOD}) and longer duration (\hyperlink{group__glossy-test-settings_gaa096b07a5e769ee16ce1e872b8fa9e96}{GLOSSY\_\-INIT\_\-DURATION}).
+
+Receivers exit the bootstrapping phase when they have computed the reference time for \hyperlink{group__glossy-test-settings_ga8c2dcd42a2c913f0f80525a7c2eac3f1}{GLOSSY\_\-BOOTSTRAP\_\-PERIODS} consecutive Glossy phases. 

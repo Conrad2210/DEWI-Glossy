@@ -5,8 +5,7 @@ endif
 ifeq ($(TARGET),)
   -include Makefile.target
   ifeq ($(TARGET),)
-    ${info TARGET not defined, using target 'native'}
-    TARGET=native
+    ${error TARGET not defined}
   else
     ${info using saved target '$(TARGET)'}
   endif
@@ -47,7 +46,7 @@ CFLAGS += -DCONTIKI_TARGET_$(TARGET_UPPERCASE)
 
 SYSTEM  = process.c autostart.c
 THREADS = 
-LIBS    = timer.c etimer.c energest.c rtimer.c ringbuf.c
+LIBS    = timer.c etimer.c energest.c rtimer.c ringbuf.c memb.c list.c random.c
 DEV     = 
 NET     = 
 
@@ -61,6 +60,16 @@ else
 endif
 
 CONTIKI_SOURCEFILES += $(CONTIKIFILES)
+
+include $(CONTIKI)/core/net/lwb/Makefile.lwb
+CONTIKIDIRS += $(CONTIKI)/core/net/lwb
+CONTIKIDIRS += $(CONTIKI)/core/net/glossy
+
+ifdef WITH_UIP
+include $(CONTIKI)/core/net/uip6/Makefile.uip6
+CONTIKIDIRS += $(CONTIKI)/core/net/uip6
+endif
+
 
 CONTIKIDIRS += ${addprefix $(CONTIKI)/core/,dev lib net net/mac net/rime \
                  net/routing sys cfs ctk lib/ctk loader . }
