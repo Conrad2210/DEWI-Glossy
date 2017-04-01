@@ -50,7 +50,7 @@
 #ifdef LWB_CONF_MAX_DATA_BUF_ELEMENTS
 #define LWB_MAX_DATA_BUF_ELEMENTS   LWB_CONF_MAX_DATA_BUF_ELEMENTS
 #else
-#define LWB_MAX_DATA_BUF_ELEMENTS   5
+#define LWB_MAX_DATA_BUF_ELEMENTS   8
 #endif
 
 /// @brief Maximum number of stream request elements
@@ -65,7 +65,7 @@
 #ifdef LWB_CONF_MAX_N_STREAMS
 #define LWB_CONF_MAX_N_STREAMS      LWB_MAX_N_STREAMS
 #else
-#define LWB_MAX_N_STREAMS  20
+#define LWB_MAX_N_STREAMS  30
 #endif
 
 /// @brief Maximum number of slots in a round

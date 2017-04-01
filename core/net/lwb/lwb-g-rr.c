@@ -134,11 +134,14 @@ static void prepare_data_packet() {
 
 		// Set number of packets in the buffer that are ready to be transmitted
 		p_buf_item->buf.header.in_queue = ui8_tx_buf_q_size;
-		uint16_t timeNow = RTIMER_NOW();
-		uint8_t first8 = timeNow & 0xFF, second8 = (timeNow >> 8) & 0xFF;
-		memcpy(p_buf_item->buf.data + 5, &first8, 1);
-		memcpy(p_buf_item->buf.data + 6, &second8, 1);
-
+		uint16_t type;
+		memcpy(&type, p_buf_item->buf.data, 1);
+		if (type == 0x03) {
+			uint16_t timeNow = RTIMER_NOW();
+			uint8_t first8 = timeNow & 0xFF, second8 = (timeNow >> 8) & 0xFF;
+			memcpy(p_buf_item->buf.data + 5, &first8, 1);
+			memcpy(p_buf_item->buf.data + 6, &second8, 1);
+		}
 		// First, we copy the data. The data header will be copied later at the end.
 		// We may need to update options of the data header if we have stream requests to be sent.
 		memcpy(lwb_context.txrx_buf + sizeof(data_header_t),
@@ -344,12 +347,16 @@ static void process_data_packet(uint8_t slot_idx) {
 	// Copy the data into the buffer and add to the queue
 	memcpy(p_item->buf.data, lwb_context.txrx_buf + sizeof(data_header_t),
 			p_item->buf.header.data_len);
-	uint16_t timeRx = GLOSSY_T_REF + T_RR_ON * slot_idx;
-	uint8_t first8 = timeRx & 0xFF, second8 = (timeRx >> 8) & 0xFF;
-	memcpy(p_item->buf.data + 7, &first8, 1);
-	memcpy(p_item->buf.data + 8, &second8, 1);
-	list_add(lst_rx_buf_queue, p_item);
-	ui8_rx_buf_q_size++;
+	uint16_t type;
+	memcpy(&type, p_item->buf.data, 1);
+	if (type == 0x03) {
+		uint16_t timeRx = GLOSSY_T_REF + T_RR_ON * slot_idx;
+		uint8_t first8 = timeRx & 0xFF, second8 = (timeRx >> 8) & 0xFF;
+		memcpy(p_item->buf.data + 7, &first8, 1);
+		memcpy(p_item->buf.data + 8, &second8, 1);
+	}
+		list_add(lst_rx_buf_queue, p_item);
+		ui8_rx_buf_q_size++;
 
 	// Poll the LWB main process to deliver data to APP layer
 	LWB_SET_POLL_FLAG(LWB_POLL_FLAGS_DATA);
@@ -535,48 +542,30 @@ inline void lwb_g_rr_hslp_send_stream_reqs() {
 //--------------------------------------------------------------------------------------------------
 PT_THREAD(lwb_g_rr_host(struct rtimer *t, lwb_context_t *p_context)) {
 	PT_BEGIN(&pt_lwb_g_rr)
-	;
+		;
 
-	while (1) {
-		leds_on(LEDS_GREEN);
+		while (1) {
+			leds_on(LEDS_GREEN);
 
-		for (ui8_slot_idx = 0; ui8_slot_idx < N_CURRENT_DATA_SLOTS();
-				ui8_slot_idx++) {
+			for (ui8_slot_idx = 0; ui8_slot_idx < N_CURRENT_DATA_SLOTS();
+					ui8_slot_idx++) {
 
 #if LWB_HSLP
-			lwb_g_rr_hslp_receive_app_data();
+				lwb_g_rr_hslp_receive_app_data();
 #endif // LWB_HSLP
 
-			// schedule Glossy for the next slot
-			SCHEDULE(lwb_context.t_sync_ref,
-					T_SYNC_ON + T_S_R_GAP + (ui8_slot_idx * (T_RR_ON + T_GAP)),
-					lwb_g_rr_host);
-			PT_YIELD(&pt_lwb_g_rr);
-
-			if (CURRENT_SCHEDULE().slots[ui8_slot_idx] == 0) {
-				// We have stream acknowledgement(s) to be sent.
-				prepare_stream_acks();
-				glossy_start(lwb_context.txrx_buf, lwb_context.txrx_buf_len,
-						GLOSSY_INITIATOR, GLOSSY_NO_SYNC,
-						N_RR, LWB_PKT_TYPE_STREAM_ACK,
-						lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
-								+ (ui8_slot_idx * (T_RR_ON + T_GAP)) + T_RR_ON,
-						(rtimer_callback_t) lwb_g_rr_host, &lwb_context.rt,
-						&lwb_context);
-
+				// schedule Glossy for the next slot
+				SCHEDULE(lwb_context.t_sync_ref,
+						T_SYNC_ON + T_S_R_GAP + (ui8_slot_idx * (T_RR_ON + T_GAP)),
+						lwb_g_rr_host);
 				PT_YIELD(&pt_lwb_g_rr);
 
-				glossy_stop();
-
-			} else if (CURRENT_SCHEDULE().slots[ui8_slot_idx] == node_id) {
-				// This is my slot (allocated for the host)
-
-				if (ui8_tx_buf_q_size != 0) {
-					// We have something to send
-					prepare_data_packet();
+				if (CURRENT_SCHEDULE().slots[ui8_slot_idx] == 0) {
+					// We have stream acknowledgement(s) to be sent.
+					prepare_stream_acks();
 					glossy_start(lwb_context.txrx_buf, lwb_context.txrx_buf_len,
 							GLOSSY_INITIATOR, GLOSSY_NO_SYNC,
-							N_RR, LWB_PKT_TYPE_DATA,
+							N_RR, LWB_PKT_TYPE_STREAM_ACK,
 							lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
 									+ (ui8_slot_idx * (T_RR_ON + T_GAP))
 									+ T_RR_ON,
@@ -584,14 +573,85 @@ PT_THREAD(lwb_g_rr_host(struct rtimer *t, lwb_context_t *p_context)) {
 							&lwb_context);
 
 					PT_YIELD(&pt_lwb_g_rr);
+
 					glossy_stop();
 
-				} else {
-					// Ohh...we have nothing to send even though this is our slot. We just stay silent.
-				}
+				} else if (CURRENT_SCHEDULE().slots[ui8_slot_idx] == node_id) {
+					// This is my slot (allocated for the host)
 
-			} else {
-				// The slot belongs to some other node
+					if (ui8_tx_buf_q_size != 0) {
+						// We have something to send
+						prepare_data_packet();
+						glossy_start(lwb_context.txrx_buf,
+								lwb_context.txrx_buf_len, GLOSSY_INITIATOR,
+								GLOSSY_NO_SYNC,
+								N_RR, LWB_PKT_TYPE_DATA,
+								lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
+										+ (ui8_slot_idx * (T_RR_ON + T_GAP))
+										+ T_RR_ON,
+								(rtimer_callback_t) lwb_g_rr_host,
+								&lwb_context.rt, &lwb_context);
+
+						PT_YIELD(&pt_lwb_g_rr);
+						glossy_stop();
+
+					} else {
+						// Ohh...we have nothing to send even though this is our slot. We just stay silent.
+					}
+
+				} else {
+					// The slot belongs to some other node
+					glossy_start(lwb_context.txrx_buf, 0, GLOSSY_RECEIVER,
+							GLOSSY_NO_SYNC,
+							N_RR, 0,
+							lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
+									+ (ui8_slot_idx * (T_RR_ON + T_GAP))
+									+ T_RR_ON,
+							(rtimer_callback_t) lwb_g_rr_host, &lwb_context.rt,
+							&lwb_context);
+
+					PT_YIELD(&pt_lwb_g_rr);
+
+					if (glossy_stop()) {
+						// RX count is greater than zero i.e. Glossy received a packet
+						ui8_g_header = get_header();
+						lwb_context.txrx_buf_len = get_data_len();
+
+						if (ui8_g_header == LWB_PKT_TYPE_DATA) {
+							// Data packet
+							lwb_sched_update_data_slot_usage(ui8_slot_idx, 1);
+#if LWB_HSLP
+							lwb_g_rr_hslp_send_app_data();
+#else
+							process_data_packet(ui8_slot_idx);
+#endif // LWB_HSLP
+
+						} else {
+							// Unknown packets
+							/// @todo add stats about unknown packets.
+						}
+
+					} else {
+						// we haven't received Glossy flooding.
+						/// @todo Add stats about not received Glossy flooding.
+						lwb_sched_update_data_slot_usage(ui8_slot_idx, 0);
+					}
+				}
+			}
+
+			// We've iterated through all the data/ack slots. Now it is time for contention slots
+
+			for (;
+					ui8_slot_idx
+							< N_CURRENT_DATA_SLOTS() + N_CURRENT_FREE_SLOTS();
+					ui8_slot_idx++) {
+
+				// schedule Glossy for the next slot.
+				SCHEDULE(lwb_context.t_sync_ref,
+						T_SYNC_ON + T_S_R_GAP + (ui8_slot_idx * (T_RR_ON + T_GAP)),
+						lwb_g_rr_host);
+				PT_YIELD(&pt_lwb_g_rr);
+
 				glossy_start(lwb_context.txrx_buf, 0, GLOSSY_RECEIVER,
 						GLOSSY_NO_SYNC,
 						N_RR, 0,
@@ -607,15 +667,14 @@ PT_THREAD(lwb_g_rr_host(struct rtimer *t, lwb_context_t *p_context)) {
 					ui8_g_header = get_header();
 					lwb_context.txrx_buf_len = get_data_len();
 
-					if (ui8_g_header == LWB_PKT_TYPE_DATA) {
-						// Data packet
-						lwb_sched_update_data_slot_usage(ui8_slot_idx, 1);
+					if (ui8_g_header == LWB_PKT_TYPE_STREAM_REQ) {
+						// Stream requests
 #if LWB_HSLP
-						lwb_g_rr_hslp_send_app_data();
-#else
-						process_data_packet(ui8_slot_idx);
-#endif // LWB_HSLP
-
+						lwb_g_rr_hslp_send_stream_reqs();
+#endif
+						// We feed stream request information regardless of external device is used to
+						// compute schedule
+						process_stream_reqs();
 					} else {
 						// Unknown packets
 						/// @todo add stats about unknown packets.
@@ -624,9 +683,142 @@ PT_THREAD(lwb_g_rr_host(struct rtimer *t, lwb_context_t *p_context)) {
 				} else {
 					// we haven't received Glossy flooding.
 					/// @todo Add stats about not received Glossy flooding.
-					lwb_sched_update_data_slot_usage(ui8_slot_idx, 0);
+				}
+
+			}
+
+			// Copy current schedule to old schedule
+			memcpy(&OLD_SCHEDULE(), &CURRENT_SCHEDULE(),
+					sizeof(lwb_schedule_t));
+
+#if LWB_HSLP
+			lwb_g_rr_hslp_send_receive_schedule();
+#else
+			// Compute new schedule
+			lwb_sched_compute_schedule(&CURRENT_SCHEDULE());
+#endif // LWB_HSLP
+
+			// Increase the time by round period
+			lwb_context.time += OLD_SCHEDULE_INFO().round_period;
+
+			// We ignore what scheduler tells about host id and time
+			CURRENT_SCHEDULE_INFO().host_id = node_id;
+			CURRENT_SCHEDULE_INFO().time = UI32_GET_LOW(lwb_context.time);
+
+			// Compress and copy the schedule to buffer
+			memcpy(lwb_context.txrx_buf, &CURRENT_SCHEDULE_INFO(),
+					sizeof(lwb_sched_info_t));
+			lwb_context.txrx_buf_len = sizeof(lwb_sched_info_t);
+			lwb_context.txrx_buf_len += lwb_sched_compress(&CURRENT_SCHEDULE(),
+					lwb_context.txrx_buf + lwb_context.txrx_buf_len,
+					LWB_MAX_TXRX_BUF_LEN - lwb_context.txrx_buf_len);
+
+			// Schedule next Glossy synchronization based on old period.
+			if (OLD_SCHEDULE_INFO().round_period == 1) {
+				SCHEDULE(lwb_context.t_sync_ref,
+						RTIMER_SECOND + (lwb_context.skew / (int32_t)64) - lwb_context.t_sync_guard,
+						lwb_g_sync_host);
+			} else {
+				// Round period is not 1 second. Therefore, we use rtimer_set_long()
+				SCHEDULE_L(lwb_context.t_sync_ref,
+						(OLD_SCHEDULE_INFO().round_period * (uint32_t)RTIMER_SECOND) + ((int32_t)OLD_SCHEDULE_INFO().round_period * lwb_context.skew / (int32_t)64) - lwb_context.t_sync_guard,
+						lwb_g_sync_host);
+			}
+
+			leds_off(LEDS_GREEN);
+
+			LWB_SET_POLL_FLAG(LWB_POLL_FLAGS_SCHED_END);
+			process_poll(&lwb_main_process);
+
+			PT_YIELD(&pt_lwb_g_rr);
+
+		}
+
+	PT_END(&pt_lwb_g_rr);
+return PT_ENDED;
+}
+
+//--------------------------------------------------------------------------------------------------
+PT_THREAD(lwb_g_rr_source(struct rtimer *t, lwb_context_t *p_context)) {
+PT_BEGIN(&pt_lwb_g_rr)
+	;
+
+// starting time of a slot = T_REF + T_S_R_GAP + (slot_idx * (T_RR_ON + T_GAP))
+// end time of a slot      = T_REF + T_SYNC_ON + T_S_R_GAP + (slot_idx * (T_RR_ON + T_GAP)) + T_RR_ON
+
+	while (1) {
+		leds_on(LEDS_GREEN);
+
+		for (ui8_slot_idx = 0; ui8_slot_idx < N_CURRENT_DATA_SLOTS();
+				ui8_slot_idx++) {
+
+			// schedule Glossy for the next slot
+			SCHEDULE(lwb_context.t_sync_ref,
+					T_SYNC_ON + T_S_R_GAP + (ui8_slot_idx * (T_RR_ON + T_GAP)),
+					lwb_g_rr_source);
+			PT_YIELD(&pt_lwb_g_rr);
+
+			if (CURRENT_SCHEDULE().slots[ui8_slot_idx] == node_id) {
+				// This is our slot. Now we can become the initiator.
+
+				if (ui8_tx_buf_q_size != 0) {
+					// We have something to send
+					prepare_data_packet();
+
+					glossy_start(lwb_context.txrx_buf, lwb_context.txrx_buf_len,
+							GLOSSY_INITIATOR, GLOSSY_NO_SYNC,
+							N_RR, LWB_PKT_TYPE_DATA,
+							lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
+									+ (ui8_slot_idx * (T_RR_ON + T_GAP))
+									+ T_RR_ON,
+							(rtimer_callback_t) lwb_g_rr_source,
+							&lwb_context.rt, &lwb_context);
+
+					PT_YIELD(&pt_lwb_g_rr);
+					glossy_stop();
+
+				} else {
+					// Ohh...we have nothing to send even though this is our slot. We just stay silent.
+				}
+
+			} else {
+				// This is not our time slot. So we become receiver to receive Glossy flooding.
+				lwb_save_ctrl_energest();
+				glossy_start(lwb_context.txrx_buf, 0, GLOSSY_RECEIVER,
+						GLOSSY_NO_SYNC,
+						N_RR, 0,
+						lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
+								+ (ui8_slot_idx * (T_RR_ON + T_GAP)) + T_RR_ON,
+						(rtimer_callback_t) lwb_g_rr_source, &lwb_context.rt,
+						&lwb_context);
+
+				PT_YIELD(&pt_lwb_g_rr);
+
+				if (glossy_stop()) {
+					// RX count is greater than zero i.e. Glossy received a packet
+					ui8_g_header = get_header();
+					lwb_context.txrx_buf_len = get_data_len();
+
+					if (ui8_g_header == LWB_PKT_TYPE_STREAM_ACK) {
+						// Stream ACKs
+						// Here, we are updating energet values only for stream acks.
+						// It is fine since we always save energest values before glossy starts.
+						lwb_update_ctrl_energest();
+						process_stream_acks();
+					} else if (ui8_g_header == LWB_PKT_TYPE_DATA) {
+						// Data packet
+						process_data_packet(ui8_slot_idx);
+					} else {
+						// Unknown packets
+						/// @todo add stats about unknown packets.
+					}
+
+				} else {
+					// we haven't received Glossy flooding.
+					/// @todo Add stats about not received Glossy flooding.
 				}
 			}
+
 		}
 
 		// We've iterated through all the data/ack slots. Now it is time for contention slots
@@ -637,210 +829,51 @@ PT_THREAD(lwb_g_rr_host(struct rtimer *t, lwb_context_t *p_context)) {
 			// schedule Glossy for the next slot.
 			SCHEDULE(lwb_context.t_sync_ref,
 					T_SYNC_ON + T_S_R_GAP + (ui8_slot_idx * (T_RR_ON + T_GAP)),
-					lwb_g_rr_host);
+					lwb_g_rr_source);
 			PT_YIELD(&pt_lwb_g_rr);
 
-			glossy_start(lwb_context.txrx_buf, 0, GLOSSY_RECEIVER,
-					GLOSSY_NO_SYNC,
-					N_RR, 0,
-					lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
-							+ (ui8_slot_idx * (T_RR_ON + T_GAP)) + T_RR_ON,
-					(rtimer_callback_t) lwb_g_rr_host, &lwb_context.rt,
-					&lwb_context);
+			if (ui8_stream_reqs_lst_size > 0) {
+				if (ui8_n_rounds_to_wait == 0) {
+					// We have some stream requests to be sent
+					prepare_stream_reqs();
+					lwb_save_ctrl_energest();
+					glossy_start(lwb_context.txrx_buf, lwb_context.txrx_buf_len,
+							GLOSSY_INITIATOR, GLOSSY_NO_SYNC,
+							N_RR, LWB_PKT_TYPE_STREAM_REQ,
+							lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
+									+ (ui8_slot_idx * (T_RR_ON + T_GAP))
+									+ T_RR_ON,
+							(rtimer_callback_t) lwb_g_rr_source,
+							&lwb_context.rt, &lwb_context);
 
-			PT_YIELD(&pt_lwb_g_rr);
+					PT_YIELD(&pt_lwb_g_rr);
 
-			if (glossy_stop()) {
-				// RX count is greater than zero i.e. Glossy received a packet
-				ui8_g_header = get_header();
-				lwb_context.txrx_buf_len = get_data_len();
-
-				if (ui8_g_header == LWB_PKT_TYPE_STREAM_REQ) {
-					// Stream requests
-#if LWB_HSLP
-					lwb_g_rr_hslp_send_stream_reqs();
-#endif
-					// We feed stream request information regardless of external device is used to
-					// compute schedule
-					process_stream_reqs();
-				} else {
-					// Unknown packets
-					/// @todo add stats about unknown packets.
-				}
-
-			} else {
-				// we haven't received Glossy flooding.
-				/// @todo Add stats about not received Glossy flooding.
-			}
-
-		}
-
-		// Copy current schedule to old schedule
-		memcpy(&OLD_SCHEDULE(), &CURRENT_SCHEDULE(), sizeof(lwb_schedule_t));
-
-#if LWB_HSLP
-		lwb_g_rr_hslp_send_receive_schedule();
-#else
-		// Compute new schedule
-		lwb_sched_compute_schedule(&CURRENT_SCHEDULE());
-#endif // LWB_HSLP
-
-		// Increase the time by round period
-		lwb_context.time += OLD_SCHEDULE_INFO().round_period;
-
-		// We ignore what scheduler tells about host id and time
-		CURRENT_SCHEDULE_INFO().host_id = node_id;
-		CURRENT_SCHEDULE_INFO().time = UI32_GET_LOW(lwb_context.time);
-
-		// Compress and copy the schedule to buffer
-		memcpy(lwb_context.txrx_buf, &CURRENT_SCHEDULE_INFO(),
-				sizeof(lwb_sched_info_t));
-		lwb_context.txrx_buf_len = sizeof(lwb_sched_info_t);
-		lwb_context.txrx_buf_len += lwb_sched_compress(&CURRENT_SCHEDULE(),
-				lwb_context.txrx_buf + lwb_context.txrx_buf_len,
-				LWB_MAX_TXRX_BUF_LEN - lwb_context.txrx_buf_len);
-
-		// Schedule next Glossy synchronization based on old period.
-		if (OLD_SCHEDULE_INFO().round_period == 1) {
-			SCHEDULE(lwb_context.t_sync_ref,
-					RTIMER_SECOND + (lwb_context.skew / (int32_t)64) - lwb_context.t_sync_guard,
-					lwb_g_sync_host);
-		} else {
-			// Round period is not 1 second. Therefore, we use rtimer_set_long()
-			SCHEDULE_L(lwb_context.t_sync_ref,
-					(OLD_SCHEDULE_INFO().round_period * (uint32_t)RTIMER_SECOND) + ((int32_t)OLD_SCHEDULE_INFO().round_period * lwb_context.skew / (int32_t)64) - lwb_context.t_sync_guard,
-					lwb_g_sync_host);
-		}
-
-		leds_off(LEDS_GREEN);
-
-		LWB_SET_POLL_FLAG(LWB_POLL_FLAGS_SCHED_END);
-		process_poll(&lwb_main_process);
-
-		PT_YIELD(&pt_lwb_g_rr);
-
-	}
-
-PT_END(&pt_lwb_g_rr);
-return PT_ENDED;
-}
-
-//--------------------------------------------------------------------------------------------------
-PT_THREAD(lwb_g_rr_source(struct rtimer *t, lwb_context_t *p_context)) {
-PT_BEGIN(&pt_lwb_g_rr)
-;
-
-// starting time of a slot = T_REF + T_S_R_GAP + (slot_idx * (T_RR_ON + T_GAP))
-// end time of a slot      = T_REF + T_SYNC_ON + T_S_R_GAP + (slot_idx * (T_RR_ON + T_GAP)) + T_RR_ON
-
-while (1) {
-	leds_on(LEDS_GREEN);
-
-	for (ui8_slot_idx = 0; ui8_slot_idx < N_CURRENT_DATA_SLOTS();
-			ui8_slot_idx++) {
-
-		// schedule Glossy for the next slot
-		SCHEDULE(lwb_context.t_sync_ref,
-				T_SYNC_ON + T_S_R_GAP + (ui8_slot_idx * (T_RR_ON + T_GAP)),
-				lwb_g_rr_source);
-		PT_YIELD(&pt_lwb_g_rr);
-
-		if (CURRENT_SCHEDULE().slots[ui8_slot_idx] == node_id) {
-			// This is our slot. Now we can become the initiator.
-
-			if (ui8_tx_buf_q_size != 0) {
-				// We have something to send
-				prepare_data_packet();
-
-				glossy_start(lwb_context.txrx_buf, lwb_context.txrx_buf_len,
-						GLOSSY_INITIATOR, GLOSSY_NO_SYNC,
-						N_RR, LWB_PKT_TYPE_DATA,
-						lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
-								+ (ui8_slot_idx * (T_RR_ON + T_GAP)) + T_RR_ON,
-						(rtimer_callback_t) lwb_g_rr_source, &lwb_context.rt,
-						&lwb_context);
-
-				PT_YIELD(&pt_lwb_g_rr);
-				glossy_stop();
-
-			} else {
-				// Ohh...we have nothing to send even though this is our slot. We just stay silent.
-			}
-
-		} else {
-			// This is not our time slot. So we become receiver to receive Glossy flooding.
-			lwb_save_ctrl_energest();
-			glossy_start(lwb_context.txrx_buf, 0, GLOSSY_RECEIVER,
-					GLOSSY_NO_SYNC,
-					N_RR, 0,
-					lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
-							+ (ui8_slot_idx * (T_RR_ON + T_GAP)) + T_RR_ON,
-					(rtimer_callback_t) lwb_g_rr_source, &lwb_context.rt,
-					&lwb_context);
-
-			PT_YIELD(&pt_lwb_g_rr);
-
-			if (glossy_stop()) {
-				// RX count is greater than zero i.e. Glossy received a packet
-				ui8_g_header = get_header();
-				lwb_context.txrx_buf_len = get_data_len();
-
-				if (ui8_g_header == LWB_PKT_TYPE_STREAM_ACK) {
-					// Stream ACKs
-					// Here, we are updating energet values only for stream acks.
-					// It is fine since we always save energest values before glossy starts.
+					glossy_stop();
 					lwb_update_ctrl_energest();
-					process_stream_acks();
-				} else if (ui8_g_header == LWB_PKT_TYPE_DATA) {
-					// Data packet
-					process_data_packet(ui8_slot_idx);
+					ui8_n_trials++;
+					// Calculate the number of trials to wait before trying next
+					ui8_n_rounds_to_wait = (uint8_t) random_rand()
+							% (1 << (ui8_n_trials % 4));
 				} else {
-					// Unknown packets
-					/// @todo add stats about unknown packets.
+					// We have to wait. So, we just participate to the flooding
+					lwb_save_ctrl_energest();
+					glossy_start(lwb_context.txrx_buf, 0, GLOSSY_RECEIVER,
+							GLOSSY_NO_SYNC,
+							N_RR, 0,
+							lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
+									+ (ui8_slot_idx * (T_RR_ON + T_GAP))
+									+ T_RR_ON,
+							(rtimer_callback_t) lwb_g_rr_source,
+							&lwb_context.rt, &lwb_context);
+
+					PT_YIELD(&pt_lwb_g_rr);
+					glossy_stop();
+					lwb_update_ctrl_energest();
+					ui8_n_rounds_to_wait--;
 				}
 
 			} else {
-				// we haven't received Glossy flooding.
-				/// @todo Add stats about not received Glossy flooding.
-			}
-		}
-
-	}
-
-	// We've iterated through all the data/ack slots. Now it is time for contention slots
-
-	for (; ui8_slot_idx < N_CURRENT_DATA_SLOTS() + N_CURRENT_FREE_SLOTS();
-			ui8_slot_idx++) {
-
-		// schedule Glossy for the next slot.
-		SCHEDULE(lwb_context.t_sync_ref,
-				T_SYNC_ON + T_S_R_GAP + (ui8_slot_idx * (T_RR_ON + T_GAP)),
-				lwb_g_rr_source);
-		PT_YIELD(&pt_lwb_g_rr);
-
-		if (ui8_stream_reqs_lst_size > 0) {
-			if (ui8_n_rounds_to_wait == 0) {
-				// We have some stream requests to be sent
-				prepare_stream_reqs();
-				lwb_save_ctrl_energest();
-				glossy_start(lwb_context.txrx_buf, lwb_context.txrx_buf_len,
-						GLOSSY_INITIATOR, GLOSSY_NO_SYNC,
-						N_RR, LWB_PKT_TYPE_STREAM_REQ,
-						lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
-								+ (ui8_slot_idx * (T_RR_ON + T_GAP)) + T_RR_ON,
-						(rtimer_callback_t) lwb_g_rr_source, &lwb_context.rt,
-						&lwb_context);
-
-				PT_YIELD(&pt_lwb_g_rr);
-
-				glossy_stop();
-				lwb_update_ctrl_energest();
-				ui8_n_trials++;
-				// Calculate the number of trials to wait before trying next
-				ui8_n_rounds_to_wait = (uint8_t) random_rand()
-						% (1 << (ui8_n_trials % 4));
-			} else {
-				// We have to wait. So, we just participate to the flooding
+				// We just participate to the flooding
 				lwb_save_ctrl_energest();
 				glossy_start(lwb_context.txrx_buf, 0, GLOSSY_RECEIVER,
 						GLOSSY_NO_SYNC,
@@ -853,51 +886,34 @@ while (1) {
 				PT_YIELD(&pt_lwb_g_rr);
 				glossy_stop();
 				lwb_update_ctrl_energest();
-				ui8_n_rounds_to_wait--;
 			}
 
-		} else {
-			// We just participate to the flooding
-			lwb_save_ctrl_energest();
-			glossy_start(lwb_context.txrx_buf, 0, GLOSSY_RECEIVER,
-					GLOSSY_NO_SYNC,
-					N_RR, 0,
-					lwb_context.t_sync_ref + T_SYNC_ON + T_S_R_GAP
-							+ (ui8_slot_idx * (T_RR_ON + T_GAP)) + T_RR_ON,
-					(rtimer_callback_t) lwb_g_rr_source, &lwb_context.rt,
-					&lwb_context);
-
-			PT_YIELD(&pt_lwb_g_rr);
-			glossy_stop();
-			lwb_update_ctrl_energest();
 		}
 
+		// Copy current schedule to old schedule
+		memcpy(&OLD_SCHEDULE(), &CURRENT_SCHEDULE(), sizeof(lwb_schedule_t));
+
+		// Now, we have iterated through all the data and free slots.
+		// We have to schedule for receiving next round's schedule.
+
+		if (OLD_SCHEDULE_INFO().round_period == 1) {
+			SCHEDULE(lwb_context.t_sync_ref,
+					(uint32_t)RTIMER_SECOND + (lwb_context.skew / (int32_t)64) - lwb_context.t_sync_guard,
+					lwb_g_sync_source);
+		} else {
+			// Round period is not 1 second. Therefore, we use rtimer_set_long()
+			SCHEDULE_L(lwb_context.t_sync_ref,
+					(OLD_SCHEDULE_INFO().round_period * (uint32_t)RTIMER_SECOND) + ((int32_t)OLD_SCHEDULE_INFO().round_period * lwb_context.skew / (int32_t)64) - lwb_context.t_sync_guard,
+					lwb_g_sync_source);
+		}
+
+		leds_off(LEDS_GREEN);
+
+		LWB_SET_POLL_FLAG(LWB_POLL_FLAGS_SCHED_END);
+		process_poll(&lwb_main_process);
+
+		PT_YIELD(&pt_lwb_g_rr);
 	}
-
-	// Copy current schedule to old schedule
-	memcpy(&OLD_SCHEDULE(), &CURRENT_SCHEDULE(), sizeof(lwb_schedule_t));
-
-	// Now, we have iterated through all the data and free slots.
-	// We have to schedule for receiving next round's schedule.
-
-	if (OLD_SCHEDULE_INFO().round_period == 1) {
-		SCHEDULE(lwb_context.t_sync_ref,
-				(uint32_t)RTIMER_SECOND + (lwb_context.skew / (int32_t)64) - lwb_context.t_sync_guard,
-				lwb_g_sync_source);
-	} else {
-		// Round period is not 1 second. Therefore, we use rtimer_set_long()
-		SCHEDULE_L(lwb_context.t_sync_ref,
-				(OLD_SCHEDULE_INFO().round_period * (uint32_t)RTIMER_SECOND) + ((int32_t)OLD_SCHEDULE_INFO().round_period * lwb_context.skew / (int32_t)64) - lwb_context.t_sync_guard,
-				lwb_g_sync_source);
-	}
-
-	leds_off(LEDS_GREEN);
-
-	LWB_SET_POLL_FLAG(LWB_POLL_FLAGS_SCHED_END);
-	process_poll(&lwb_main_process);
-
-	PT_YIELD(&pt_lwb_g_rr);
-}
 
 PT_END(&pt_lwb_g_rr);
 return PT_ENDED;
@@ -967,7 +983,7 @@ SET_STREAM_ID(p_req_item->req.req_type, ui8_stream_id_next);
 list_add(lst_stream_req, p_req_item);
 ui8_stream_reqs_lst_size++;
 
-        // Set the joining state
+		// Set the joining state
 switch (lwb_context.joining_state) {
 case LWB_JOINING_STATE_NOT_JOINED:
 case LWB_JOINING_STATE_JOINING:
@@ -998,7 +1014,7 @@ SET_STREAM_ID(p_req_item->req.req_type, ui8_id);
 list_add(lst_stream_req, p_req_item);
 ui8_stream_reqs_lst_size++;
 
-        // we don't care about the joining state in here.
+		// we don't care about the joining state in here.
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1016,7 +1032,7 @@ SET_STREAM_ID(p_req_item->req.req_type, ui8_id);
 list_add(lst_stream_req, p_req_item);
 ui8_stream_reqs_lst_size++;
 
-        // Set the joining state
+		// Set the joining state
 switch (lwb_context.joining_state) {
 case LWB_JOINING_STATE_NOT_JOINED:
 case LWB_JOINING_STATE_JOINING:
